@@ -15,13 +15,13 @@ public class WarriorMovement : MonoBehaviour
     private Vector3 mousePos;
     private bool isMoving;
 
-    private Camera camera;
+    private Camera cam;
 
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
         animator = GetComponent<Animator>();
-        camera = GetComponent<Camera>();
+        cam = FindObjectOfType<Camera>();
     }
 
     void Update()
@@ -29,6 +29,14 @@ public class WarriorMovement : MonoBehaviour
         MovementInput();
         UpdateIsMoving();
         AnimationMove();
+
+        RotationInput();
+    }
+
+    private void MovementInput()
+    {
+        movement.x = Input.GetAxisRaw("Horizontal");
+        movement.z = Input.GetAxisRaw("Vertical");
     }
 
     private void UpdateIsMoving()
@@ -48,14 +56,30 @@ public class WarriorMovement : MonoBehaviour
         }
     }
 
-    private void MovementInput()
+    private void RotationInput()
     {
-        movement.x = Input.GetAxisRaw("Horizontal");
-        movement.z = Input.GetAxisRaw("Vertical");
+        var rawMousePos = Input.mousePosition;
+        rawMousePos.z = 15;
+
+        mousePos = cam.ScreenToWorldPoint(rawMousePos);
     }
 
     private void FixedUpdate()
     {
-        rb.MovePosition(rb.position + movement * moveSpeed * Time.fixedDeltaTime);
+        Move();
+        Rotate();
+    }
+
+    private void Move()
+    {
+        rb.MovePosition(rb.position + moveSpeed * Time.fixedDeltaTime * movement);
+    }
+
+    private void Rotate()
+    {
+        var lookDir = mousePos - rb.position;
+        float angle = Mathf.Atan2(lookDir.z, lookDir.x) * Mathf.Rad2Deg - 90f;
+
+        rb.rotation = Quaternion.Euler(0, -angle, 0);
     }
 }
