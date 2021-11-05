@@ -12,9 +12,17 @@ public class CameraFollow : MonoBehaviour
     [SerializeField]
     private Vector3 offset;
 
+    [SerializeField]
+    private Vector3 cameraAngle;
+
     public Vector3 GetOffset()
     {
         return offset;
+    }
+
+    private void Start()
+    {
+        transform.rotation = Quaternion.Euler(cameraAngle);
     }
 
     private void FixedUpdate()

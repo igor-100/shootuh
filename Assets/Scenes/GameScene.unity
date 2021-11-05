@@ -365,6 +365,26 @@ PrefabInstance:
       propertyPath: target
       value: 
       objectReference: {fileID: 386637161}
+    - target: {fileID: 4664137369073537856, guid: 52b03c2ebc3a9c14c800985836d2d6ca, type: 3}
+      propertyPath: offset.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4664137369073537856, guid: 52b03c2ebc3a9c14c800985836d2d6ca, type: 3}
+      propertyPath: offset.y
+      value: 18
+      objectReference: {fileID: 0}
+    - target: {fileID: 4664137369073537856, guid: 52b03c2ebc3a9c14c800985836d2d6ca, type: 3}
+      propertyPath: offset.z
+      value: -7
+      objectReference: {fileID: 0}
+    - target: {fileID: 4664137369073537856, guid: 52b03c2ebc3a9c14c800985836d2d6ca, type: 3}
+      propertyPath: smoothSpeed
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 4664137369073537856, guid: 52b03c2ebc3a9c14c800985836d2d6ca, type: 3}
+      propertyPath: cameraAngle.x
+      value: 70
+      objectReference: {fileID: 0}
     - target: {fileID: 4664137369073537857, guid: 52b03c2ebc3a9c14c800985836d2d6ca, type: 3}
       propertyPath: m_RootOrder
       value: 0

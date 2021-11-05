@@ -97,5 +97,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 0}
-  smoothSpeed: 7
-  offset: {x: 0, y: 15, z: 0}
+  smoothSpeed: 4
+  offset: {x: 0, y: 18, z: -7}
+  cameraAngle: {x: 70, y: 0, z: 0}
