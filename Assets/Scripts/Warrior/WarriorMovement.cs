@@ -4,24 +4,25 @@ using UnityEngine;
 
 public class WarriorMovement : MonoBehaviour
 {
+    private Rigidbody rb;
+    private Animator animator;
+    private Camera cam;
+    private CameraFollow cameraFollow;
+
     [SerializeField]
     [Range(0, 10)]
     private float moveSpeed = 5f;
 
-    private Rigidbody rb;
-    private Animator animator;
-
     private Vector3 movement;
     private Vector3 mousePos;
     private bool isMoving;
-
-    private Camera cam;
 
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
         animator = GetComponent<Animator>();
         cam = FindObjectOfType<Camera>();
+        cameraFollow = cam.GetComponent<CameraFollow>();
     }
 
     void Update()
@@ -59,7 +60,8 @@ public class WarriorMovement : MonoBehaviour
     private void RotationInput()
     {
         var rawMousePos = Input.mousePosition;
-        rawMousePos.z = 15;
+        // Weird?
+        rawMousePos.z = cameraFollow.GetOffset().y;
 
         mousePos = cam.ScreenToWorldPoint(rawMousePos);
     }
