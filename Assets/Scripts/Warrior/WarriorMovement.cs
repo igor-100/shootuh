@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class WarriorMovement : MonoBehaviour
@@ -80,8 +78,8 @@ public class WarriorMovement : MonoBehaviour
     private void Rotate()
     {
         var lookDir = mousePos - rb.position;
-        float angle = Mathf.Atan2(lookDir.z, lookDir.x) * Mathf.Rad2Deg - 90f;
+        float angle = Mathf.Atan2(lookDir.x, lookDir.z) * Mathf.Rad2Deg;
 
-        rb.rotation = Quaternion.Euler(0, -angle, 0);
+        rb.rotation = Quaternion.Euler(0, angle, 0);
     }
 }
