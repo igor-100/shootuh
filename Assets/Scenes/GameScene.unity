@@ -451,10 +451,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 386637158, guid: 08f827b34ec101b4d9908d43c381d681, type: 3}
-      propertyPath: projectile
-      value: 
-      objectReference: {fileID: 9055967685181506798, guid: e913f2475795ae64db8bcafdabb1096d, type: 3}
     - target: {fileID: 6723324211603660526, guid: 08f827b34ec101b4d9908d43c381d681, type: 3}
       propertyPath: m_Name
       value: Warrior

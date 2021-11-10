@@ -5,28 +5,28 @@ using UnityEngine;
 
 public class WarriorShoot : MonoBehaviour
 {
-    [SerializeField]
-    private GameObject projectile;
-    [SerializeField]
-    private Transform firePoint;
-    [SerializeField]
-    private float projectileSpeed = 30f;
+    private const string FireButton = "Fire1";
+    private const string WeaponHolder = "WeaponHolder";
 
     private Vector3 destination;
+    private WeaponHolder weaponHolder;
+    private Weapon selectedWeapon;
 
     // Start is called before the first frame update
     void Start()
     {
+        weaponHolder = transform.Find(WeaponHolder).GetComponent<WeaponHolder>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetButtonDown("Fire1"))
+        selectedWeapon = weaponHolder.SelectedWeapon;
+
+        if (Input.GetButtonDown(FireButton))
         {
             ShootProjectile();
         }
-
     }
 
     private void ShootProjectile()
@@ -36,9 +36,7 @@ public class WarriorShoot : MonoBehaviour
 
     private void InstantiateProjectile()
     {
-        var projectileObj = Instantiate(projectile, firePoint.position, Quaternion.identity);
-        Debug.Log(firePoint.position);
-        Debug.Log(transform.position);
-        projectileObj.GetComponent<Rigidbody>().velocity = transform.forward * projectileSpeed;
+        var projectileObj = Instantiate(selectedWeapon.PfProjectile, weaponHolder.transform.position, Quaternion.identity);
+        projectileObj.GetComponent<Rigidbody>().velocity = transform.forward * selectedWeapon.ProjectileSpeed;
     }
 }

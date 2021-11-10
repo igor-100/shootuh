@@ -102,8 +102,8 @@ TrailRenderer:
       m_RotationOrder: 4
     colorGradient:
       serializedVersion: 2
-      key0: {r: 0.14174068, g: 0.8117647, b: 0.058823515, a: 1}
-      key1: {r: 0.14174068, g: 0.8117647, b: 0.058823515, a: 1}
+      key0: {r: 0.7164299, g: 0, b: 0.8679245, a: 1}
+      key1: {r: 0.7164299, g: 0, b: 0.8679245, a: 1}
       key2: {r: 1, g: 1, b: 1, a: 0}
       key3: {r: 0, g: 0, b: 0, a: 0}
       key4: {r: 0, g: 0, b: 0, a: 0}
@@ -151,7 +151,7 @@ GameObject:
   - component: {fileID: 7188389157746468068}
   - component: {fileID: 6167304233786218860}
   m_Layer: 0
-  m_Name: Projectile
+  m_Name: Projectile Purple
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
