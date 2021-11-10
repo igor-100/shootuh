@@ -2,10 +2,12 @@ using UnityEngine;
 
 public class WarriorMovement : MonoBehaviour
 {
+    private const string IsRunning = "isRunning";
+    private const string FloorMaskName = "Floor";
+
     private Rigidbody rb;
     private Animator animator;
     private Camera cam;
-    private CameraFollow cameraFollow;
 
     [SerializeField]
     [Range(0, 10)]
@@ -20,7 +22,6 @@ public class WarriorMovement : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         animator = GetComponent<Animator>();
         cam = FindObjectOfType<Camera>();
-        cameraFollow = cam.GetComponent<CameraFollow>();
     }
 
     void Update()
@@ -47,21 +48,21 @@ public class WarriorMovement : MonoBehaviour
     {
         if (isMoving)
         {
-            animator.SetBool("isRunning", true);
+            animator.SetBool(IsRunning, true);
         }
         else
         {
-            animator.SetBool("isRunning", false);
+            animator.SetBool(IsRunning, false);
         }
     }
 
     private void RotationInput()
     {
-        var rawMousePos = Input.mousePosition;
-        // Weird?
-        rawMousePos.z = cameraFollow.GetOffset().y;
-
-        mousePos = cam.ScreenToWorldPoint(rawMousePos);
+        RaycastHit objectHit;
+        if (Physics.Raycast(cam.ScreenPointToRay(Input.mousePosition), out objectHit, LayerMask.GetMask(FloorMaskName)))
+        {
+            mousePos = objectHit.point;
+        }
     }
 
     private void FixedUpdate()

@@ -31,31 +31,14 @@ public class WarriorShoot : MonoBehaviour
 
     private void ShootProjectile()
     {
-        // Bit shift the index of the layer (6) to get a bit mask
-        int layerMask = 1 << 6;
-
-        // This would cast rays only against colliders in layer 6.
-        // But instead we want to collide against everything except layer 6. The ~ operator does this, it inverts a bitmask.
-        layerMask = ~layerMask;
-        RaycastHit objectHit;
-        if (Physics.Raycast(firePoint.position, transform.forward, out objectHit, 50f, layerMask))
-        {
-            Debug.DrawRay(firePoint.position, transform.TransformDirection(Vector3.forward) * objectHit.distance, Color.yellow);
-            Debug.Log("Raycast hitted to: " + objectHit.collider);
-            destination = objectHit.point;
-        }
-        else
-        {
-            Debug.DrawRay(firePoint.position, transform.TransformDirection(Vector3.forward) * 1000, Color.white);
-            Debug.Log("Raycast doesn't hit");
-            destination = transform.forward * 50;
-        }
         InstantiateProjectile();
     }
 
     private void InstantiateProjectile()
     {
         var projectileObj = Instantiate(projectile, firePoint.position, Quaternion.identity);
+        Debug.Log(firePoint.position);
+        Debug.Log(transform.position);
         projectileObj.GetComponent<Rigidbody>().velocity = transform.forward * projectileSpeed;
     }
 }
