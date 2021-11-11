@@ -7,11 +7,6 @@ public class WeaponHolder : MonoBehaviour
 {
     [SerializeField] private int selectedWeaponId = 0;
 
-    private Weapon selectedWeapon;
-
-    public Weapon SelectedWeapon { get => selectedWeapon; }
-
-
     // Start is called before the first frame update
     void Start()
     {
@@ -26,7 +21,6 @@ public class WeaponHolder : MonoBehaviour
             if (i == selectedWeaponId)
             {
                 weapon.gameObject.SetActive(true);
-                selectedWeapon = weapon.GetComponent<Weapon>();
             }
             else
             {

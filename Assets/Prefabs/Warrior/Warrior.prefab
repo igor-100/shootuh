@@ -108,8 +108,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3490705168921979390}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.339, y: -1.325, z: -1.503}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 2163339785651491546}
@@ -236,9 +236,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d29e238ef1efeeb479144f9625d3f78c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  clipSize: 20
-  pfProjectile: {fileID: 9055967685181506798, guid: 64c512e258221e34d9345fd06e53dd08, type: 3}
+  maxAmmo: 20
   projectileSpeed: 45
+  fireRate: 4
+  reloadTime: 1
+  pfProjectile: {fileID: 9055967685181506798, guid: 64c512e258221e34d9345fd06e53dd08, type: 3}
 --- !u!1 &6723324211603660448
 GameObject:
   m_ObjectHideFlags: 0
@@ -264,8 +266,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6723324211603660448}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.339, y: -1.325, z: -1.503}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 2163339785651491546}
@@ -392,9 +394,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d29e238ef1efeeb479144f9625d3f78c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  clipSize: 20
-  pfProjectile: {fileID: 9055967685181506798, guid: e913f2475795ae64db8bcafdabb1096d, type: 3}
+  maxAmmo: 20
   projectileSpeed: 30
+  fireRate: 5
+  reloadTime: 1
+  pfProjectile: {fileID: 9055967685181506798, guid: e913f2475795ae64db8bcafdabb1096d, type: 3}
 --- !u!1 &6723324211603660450
 GameObject:
   m_ObjectHideFlags: 0
@@ -2134,7 +2138,6 @@ GameObject:
   - component: {fileID: 6723324211613019500}
   - component: {fileID: 7072444061785431081}
   - component: {fileID: 7072444061785431082}
-  - component: {fileID: 386637158}
   - component: {fileID: 6211073685250999662}
   m_Layer: 0
   m_Name: Warrior
@@ -2207,18 +2210,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 5
---- !u!114 &386637158
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6723324211603660526}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 069bada9eebc3cb4fb1d1d078168fb45, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!65 &6211073685250999662
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2996,8 +2987,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8475551870916064544}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.339, y: -1.325, z: -1.503}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 2163339785651491546}
@@ -3124,6 +3115,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d29e238ef1efeeb479144f9625d3f78c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  clipSize: 20
-  pfProjectile: {fileID: 9055967685181506798, guid: b4d25e8203935164f9b55babf7a067cc, type: 3}
+  maxAmmo: 20
   projectileSpeed: 20
+  fireRate: 10
+  reloadTime: 1
+  pfProjectile: {fileID: 9055967685181506798, guid: b4d25e8203935164f9b55babf7a067cc, type: 3}
