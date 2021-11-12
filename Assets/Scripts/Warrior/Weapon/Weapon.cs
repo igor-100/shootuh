@@ -53,12 +53,13 @@ public class Weapon : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.R))
         {
             StartCoroutine(WaitForReloading());
-            currentAmmo = maxAmmo;
+            
         }
     }
 
     private IEnumerator WaitForReloading()
     {
         yield return new WaitForSeconds(reloadTime);
+        currentAmmo = maxAmmo;
     }
 }
