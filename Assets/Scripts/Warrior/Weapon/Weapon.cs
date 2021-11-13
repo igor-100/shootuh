@@ -11,7 +11,7 @@ public class Weapon : MonoBehaviour
     [SerializeField] private float projectileSpeed = 30f;
     [SerializeField] private float fireRate = 15f;
     [SerializeField] private float reloadTime = 1f;
-    [SerializeField] private GameObject pfProjectile;
+    [SerializeField] private Projectile pfProjectile;
 
     private float nextTimeToFire = 0f;
     private int currentAmmo;

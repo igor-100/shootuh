@@ -39,9 +39,4 @@ public class EnemyMovement : MonoBehaviour
     {
         rb.MovePosition(rb.position + moveSpeed * Time.fixedDeltaTime * transform.forward);
     }
-
-    private void OnCollisionEnter(Collision collision)
-    {
-        gameObject.SetActive(false);
-    }
 }

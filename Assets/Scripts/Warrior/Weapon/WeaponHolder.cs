@@ -36,7 +36,6 @@ public class WeaponHolder : MonoBehaviour
         int previousSelectedWeaponId = selectedWeaponId;
 
         MouseWheelInput();
-
         KeyAlphaInput();
 
         if (previousSelectedWeaponId != selectedWeaponId)
