@@ -53,7 +53,6 @@ public class Weapon : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.R))
         {
             StartCoroutine(WaitForReloading());
-            
         }
     }
 

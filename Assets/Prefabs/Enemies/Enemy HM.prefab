@@ -9,7 +9,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 237057683441085139}
-  - component: {fileID: 2350896305490360300}
   - component: {fileID: 8890401174718861248}
   - component: {fileID: 8796629582442076204}
   - component: {fileID: 4399356713600249538}
@@ -29,25 +28,12 @@ Transform:
   m_GameObject: {fileID: 6437301988210738952}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 2, y: 2, z: 2}
+  m_LocalScale: {x: 3, y: 3, z: 3}
   m_Children:
   - {fileID: 3881889394724792810}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2350896305490360300
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6437301988210738952}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 660353e8783bf74459f90c0969a76027, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  moveSpeed: 5
 --- !u!54 &8890401174718861248
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -89,6 +75,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 593f5917341c0c046ae96a521b5cb185, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  health: 100
+  damage: 20
+  moveSpeed: 5
+  deathTime: 2
+  attackTime: 1.5
+  attackRange: 5
 --- !u!1001 &3881889394724654546
 PrefabInstance:
   m_ObjectHideFlags: 0
