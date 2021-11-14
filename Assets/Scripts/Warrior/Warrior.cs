@@ -19,17 +19,13 @@ public class Warrior : MonoBehaviour
         
     }
 
-    private void OnCollisionEnter(Collision collision)
+    public void Hit(int damage)
     {
-        var enemy = collision.gameObject.GetComponent<Enemy>();
-        if (enemy)
+        currentHealth -= damage;
+        Debug.Log(currentHealth);
+        if (currentHealth <= 0)
         {
-            currentHealth -= enemy.Damage;
-            if (currentHealth <= 0)
-            {
-                gameObject.SetActive(false);
-            }
+            gameObject.SetActive(false);
         }
     }
-
 }

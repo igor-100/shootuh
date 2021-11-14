@@ -5,36 +5,45 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
+    private const string AttackTrigger = "attack";
+    private const string PlayerMaskName = "Player";
+
     [SerializeField] private int health = 100;
     [SerializeField] private int damage = 20;
     [SerializeField] private float moveSpeed = 5f;
+    [SerializeField] private float hitHeight = 0.5f;
     [SerializeField] private float deathTime = 2f;
-    [SerializeField] private float attackTime = 1.5f;
+    [SerializeField] private float attackTime = 1f;
     [SerializeField] private float attackRange = 5f;
 
     private int currentHealth;
-    private bool isDying;
+    private bool isDead;
     private bool isAttacking;
-    private bool isWarriorClose;
 
     private Animator animator;
     private Rigidbody rb;
     private Transform warriorTransform;
+    private BoxCollider boxCollider;
 
     public int Damage { get => damage; }
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        warriorTransform = FindObjectOfType<Warrior>().transform;
+    void Awake()
+    { 
         rb = GetComponent<Rigidbody>();
-        animator = transform.GetChild(0).GetComponent<Animator>();
+        animator = GetComponent<Animator>();
+        boxCollider = GetComponent<BoxCollider>();
     }
 
     void OnEnable()
     {
-        isDying = false;
+        boxCollider.enabled = true;
+        isDead = false;
         currentHealth = health;
+    }
+
+    private void Start()
+    {
+        warriorTransform = FindObjectOfType<Warrior>().transform;
     }
 
     // Update is called once per frame
@@ -44,26 +53,43 @@ public class Enemy : MonoBehaviour
     }
     void FixedUpdate()
     {
-        if (!isDying && !isAttacking)
+        if (!isDead && !isAttacking)
         {
-            if (Vector3.Distance(transform.position, warriorTransform.position) < attackRange)
+            RotateTowardsTheWarrior();
+            if (Vector3.Distance(transform.position, warriorTransform.position) < attackRange - 1f)
             {
-                StartCoroutine(Attack());
+                animator.SetTrigger(AttackTrigger);
+                StartCoroutine(Attacking());
             }
             else
             {
-                RotateTowardsTheWarrior();
                 Walk();
             }
         }
     }
 
-    private IEnumerator Attack()
+    private IEnumerator Attacking()
     {
         isAttacking = true;
-        animator.SetTrigger("attack");
         yield return new WaitForSeconds(attackTime);
         isAttacking = false;
+    }
+
+    public void Attack()
+    {
+        if (!isDead)
+        {
+            RaycastHit objectHit;
+            if (Physics.Raycast(new Vector3(transform.position.x, transform.position.y + hitHeight, transform.position.z),
+                transform.forward, out objectHit, attackRange, LayerMask.GetMask(PlayerMaskName)))
+            {
+                var warrior = objectHit.transform.GetComponent<Warrior>();
+                if (warrior)
+                {
+                    warrior.Hit(damage);
+                }
+            }
+        }
     }
 
     private void RotateTowardsTheWarrior()
@@ -92,7 +118,8 @@ public class Enemy : MonoBehaviour
 
     private IEnumerator Die()
     {
-        isDying = true;
+        isDead = true;
+        boxCollider.enabled = false;
         animator.SetTrigger("die");
         yield return new WaitForSeconds(deathTime);
         gameObject.SetActive(false);
