@@ -3,11 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Enemy : MonoBehaviour
+public class Enemy : MonoBehaviour, IAlive
 {
     private const string AttackTrigger = "attack";
+    private const string WalkTrigger = "walk";
     private const string PlayerMaskName = "Player";
-
     [SerializeField] private int health = 100;
     [SerializeField] private int damage = 20;
     [SerializeField] private float moveSpeed = 5f;
@@ -19,13 +19,20 @@ public class Enemy : MonoBehaviour
     private int currentHealth;
     private bool isDead;
     private bool isAttacking;
+    private bool isWalking;
 
     private Animator animator;
     private Rigidbody rb;
+    // TODO: targetTransform
     private Transform warriorTransform;
     private BoxCollider boxCollider;
 
     public int Damage { get => damage; }
+
+    public float GetHealthPercent()
+    {
+        return (float)currentHealth / health;
+    }
 
     void Awake()
     { 
@@ -53,12 +60,15 @@ public class Enemy : MonoBehaviour
     }
     void FixedUpdate()
     {
+        // TODO: State Machine? States: idle, dying, attacking, moving
+        // currentState = ...;
         if (!isDead && !isAttacking)
         {
+            // TODO: is target active?
+            // warriorTransform.gameObject.activeSelf
             RotateTowardsTheWarrior();
             if (Vector3.Distance(transform.position, warriorTransform.position) < attackRange - 1f)
             {
-                animator.SetTrigger(AttackTrigger);
                 StartCoroutine(Attacking());
             }
             else
@@ -70,7 +80,10 @@ public class Enemy : MonoBehaviour
 
     private IEnumerator Attacking()
     {
+        isWalking = false;
         isAttacking = true;
+        animator.SetTrigger(AttackTrigger);
+        // TODO: state machine
         yield return new WaitForSeconds(attackTime);
         isAttacking = false;
     }
@@ -100,6 +113,11 @@ public class Enemy : MonoBehaviour
 
     private void Walk()
     {
+        if (!isWalking)
+        {
+            isWalking = true;
+            animator.SetTrigger(WalkTrigger);
+        }
         rb.MovePosition(rb.position + moveSpeed * Time.fixedDeltaTime * transform.forward);
     }
 
@@ -111,6 +129,7 @@ public class Enemy : MonoBehaviour
             currentHealth -= projectile.Damage;
             if (currentHealth <= 0)
             {
+                currentHealth = 0;
                 StartCoroutine(Die());
             }
         }
@@ -118,6 +137,7 @@ public class Enemy : MonoBehaviour
 
     private IEnumerator Die()
     {
+        isWalking = false;
         isDead = true;
         boxCollider.enabled = false;
         animator.SetTrigger("die");

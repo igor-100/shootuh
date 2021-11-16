@@ -14,8 +14,11 @@ public class ObjectPool : MonoBehaviour
         SharedInstance = this;
     }
 
+    // TODO: projectile: dictionary: type - list<gameObject>
+
     void Start()
     {
+        // delete all or warm
         pooledObjects = new List<GameObject>();
         GameObject tmp;
         for (int i = 0; i < amountToPool; i++)
@@ -28,6 +31,7 @@ public class ObjectPool : MonoBehaviour
 
     public GameObject GetPooledObject()
     {
+        // TODO: if no object available, then instantiate new
         for (int i = 0; i < amountToPool; i++)
         {
             if (!pooledObjects[i].activeInHierarchy)
