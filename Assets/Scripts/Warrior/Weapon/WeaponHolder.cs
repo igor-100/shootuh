@@ -7,6 +7,11 @@ public class WeaponHolder : MonoBehaviour
 {
     [SerializeField] private int selectedWeaponId = 0;
 
+    private Weapon currentWeapon;
+    private int currentAmmo;
+
+    public Weapon CurrentWeapon { get => currentWeapon; }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -16,15 +21,16 @@ public class WeaponHolder : MonoBehaviour
     private void SelectWeapon()
     {
         int i = 0;
-        foreach (Transform weapon in transform)
+        foreach (Transform weaponTransform in transform)
         {
             if (i == selectedWeaponId)
             {
-                weapon.gameObject.SetActive(true);
+                weaponTransform.gameObject.SetActive(true);
+                currentWeapon = weaponTransform.GetComponent<Weapon>();
             }
             else
             {
-                weapon.gameObject.SetActive(false);
+                weaponTransform.gameObject.SetActive(false);
             }
             i++;
         }
@@ -42,6 +48,7 @@ public class WeaponHolder : MonoBehaviour
         {
             SelectWeapon();
         }
+        currentAmmo = currentWeapon.CurrentAmmo;
     }
 
     private void MouseWheelInput()

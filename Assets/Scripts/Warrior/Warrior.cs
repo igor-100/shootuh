@@ -8,7 +8,10 @@ public class Warrior : MonoBehaviour, IAlive
 
     private int currentHealth;
 
-    public int CurrentHealth { get => currentHealth; }
+    public float GetHealthPercent()
+    {
+        return (float)currentHealth / health;
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -20,11 +23,6 @@ public class Warrior : MonoBehaviour, IAlive
     void Update()
     {
 
-    }
-
-    public float GetHealthPercent()
-    {
-        return (float)currentHealth / health;
     }
 
     public void Hit(int damage)

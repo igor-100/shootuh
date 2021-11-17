@@ -6,11 +6,11 @@ public class HealthBar : MonoBehaviour
 {
     [SerializeField] private Vector3 relatedPos;
     [SerializeField] private Vector3 rotation;
-    private IAlive aliveObject;
+    private IAlive warrior;
 
     private void Start()
     {
-        aliveObject = transform.parent.GetComponent<IAlive>();
+        warrior = transform.parent.GetComponent<IAlive>();
     }
 
     // Update is called once per frame
@@ -19,7 +19,7 @@ public class HealthBar : MonoBehaviour
         var fixedPosition = transform.parent.position + relatedPos;
         transform.position = fixedPosition;
         transform.rotation = Quaternion.Euler(rotation);
-        float healthPercent = aliveObject.GetHealthPercent();
-        transform.Find("Bar").localScale = new Vector3(aliveObject.GetHealthPercent(), 1);
+        float healthPercent = warrior.GetHealthPercent();
+        transform.Find("Bar").localScale = new Vector3(warrior.GetHealthPercent(), 1);
     }
 }

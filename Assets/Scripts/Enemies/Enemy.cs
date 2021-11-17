@@ -67,7 +67,7 @@ public class Enemy : MonoBehaviour, IAlive
             // TODO: is target active?
             // warriorTransform.gameObject.activeSelf
             RotateTowardsTheWarrior();
-            if (Vector3.Distance(transform.position, warriorTransform.position) < attackRange - 1f)
+            if (Vector3.Distance(transform.position, warriorTransform.position) < attackRange - 1.5f)
             {
                 StartCoroutine(Attacking());
             }

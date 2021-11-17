@@ -12,9 +12,14 @@ public class Weapon : MonoBehaviour
     [SerializeField] private float fireRate = 15f;
     [SerializeField] private float reloadTime = 1f;
     [SerializeField] private Projectile pfProjectile;
+    [SerializeField] private string modeName;
 
     private float nextTimeToFire = 0f;
     private int currentAmmo;
+
+    public int CurrentAmmo { get => currentAmmo; }
+    public Projectile PfProjectile { get => pfProjectile; }
+    public string ModeName { get => modeName; }
 
     private void Start()
     {

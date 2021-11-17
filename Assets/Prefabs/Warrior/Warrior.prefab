@@ -315,7 +315,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 1
   m_Sprite: {fileID: 21300000, guid: 41420c78c4dce644d8281b3ce7a3d48e, type: 3}
-  m_Color: {r: 1, g: 0.05098039, b: 0.45654395, a: 1}
+  m_Color: {r: 0.015686275, g: 0.3529412, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -483,6 +483,7 @@ MonoBehaviour:
   fireRate: 4
   reloadTime: 1
   pfProjectile: {fileID: 1989884415989383802, guid: 64c512e258221e34d9345fd06e53dd08, type: 3}
+  modeName: Rifle
 --- !u!1 &6723324211603660448
 GameObject:
   m_ObjectHideFlags: 0
@@ -641,6 +642,7 @@ MonoBehaviour:
   fireRate: 5
   reloadTime: 1
   pfProjectile: {fileID: 1989884415989383802, guid: e913f2475795ae64db8bcafdabb1096d, type: 3}
+  modeName: Standard
 --- !u!1 &6723324211603660450
 GameObject:
   m_ObjectHideFlags: 0
@@ -3377,3 +3379,4 @@ MonoBehaviour:
   fireRate: 10
   reloadTime: 1
   pfProjectile: {fileID: 1989884415989383802, guid: b4d25e8203935164f9b55babf7a067cc, type: 3}
+  modeName: Rapid
