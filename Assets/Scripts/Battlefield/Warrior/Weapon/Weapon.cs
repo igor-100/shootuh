@@ -16,6 +16,7 @@ public class Weapon : MonoBehaviour
 
     private float nextTimeToFire = 0f;
     private int currentAmmo;
+    private bool isReloading;
 
     public int CurrentAmmo { get => currentAmmo; }
     public Projectile PfProjectile { get => pfProjectile; }
@@ -28,7 +29,10 @@ public class Weapon : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Fire();
+        if (!isReloading)
+        {
+            Fire();
+        }
         Reload();
     }
 
@@ -63,7 +67,9 @@ public class Weapon : MonoBehaviour
 
     private IEnumerator WaitForReloading()
     {
+        isReloading = true;
         yield return new WaitForSeconds(reloadTime);
         currentAmmo = maxAmmo;
+        isReloading = false;
     }
 }

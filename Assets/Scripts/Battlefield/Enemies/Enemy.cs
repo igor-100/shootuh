@@ -23,8 +23,7 @@ public class Enemy : MonoBehaviour, IAlive
 
     private Animator animator;
     private Rigidbody rb;
-    // TODO: targetTransform
-    private Transform warriorTransform;
+    private Transform targetTransform;
     private BoxCollider boxCollider;
 
     public int Damage { get => damage; }
@@ -35,7 +34,7 @@ public class Enemy : MonoBehaviour, IAlive
     }
 
     void Awake()
-    { 
+    {
         rb = GetComponent<Rigidbody>();
         animator = GetComponent<Animator>();
         boxCollider = GetComponent<BoxCollider>();
@@ -50,7 +49,11 @@ public class Enemy : MonoBehaviour, IAlive
 
     private void Start()
     {
-        warriorTransform = FindObjectOfType<Warrior>().transform;
+        var warrior = FindObjectOfType<Warrior>();
+        if (warrior)
+        {
+            targetTransform = warrior.transform;
+        }
     }
 
     // Update is called once per frame
@@ -62,12 +65,10 @@ public class Enemy : MonoBehaviour, IAlive
     {
         // TODO: State Machine? States: idle, dying, attacking, moving
         // currentState = ...;
-        if (!isDead && !isAttacking)
+        if (targetTransform && !isDead && !isAttacking)
         {
-            // TODO: is target active?
-            // warriorTransform.gameObject.activeSelf
             RotateTowardsTheWarrior();
-            if (Vector3.Distance(transform.position, warriorTransform.position) < attackRange - 1.5f)
+            if (Vector3.Distance(transform.position, targetTransform.position) < attackRange - 1.5f)
             {
                 StartCoroutine(Attacking());
             }
@@ -107,7 +108,7 @@ public class Enemy : MonoBehaviour, IAlive
 
     private void RotateTowardsTheWarrior()
     {
-        Vector3 relativePos = warriorTransform.position - transform.position;
+        Vector3 relativePos = targetTransform.position - transform.position;
         transform.rotation = Quaternion.LookRotation(relativePos);
     }
 
