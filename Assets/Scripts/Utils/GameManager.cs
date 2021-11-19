@@ -1,11 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
     [SerializeField] private GameOverScreen gameOverScreen;
+
+    private SceneLoader sceneLoader;
+
+    private void Start()
+    {
+        sceneLoader = FindObjectOfType<SceneLoader>();
+    }
 
     public void GameOver()
     {
@@ -14,11 +20,11 @@ public class GameManager : MonoBehaviour
 
     public void Restart()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        sceneLoader.RestartScene();
     }
 
     public void Quit()
     {
-
+        sceneLoader.LoadScene("StartScene");
     }
 }
