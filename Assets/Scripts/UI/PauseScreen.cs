@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class PauseScreen : MonoBehaviour
 {
-    public static bool GameIsPaused = false;
+    private static bool gameIsPaused = false;
 
     [SerializeField] private Button resumeButton;
     [SerializeField] private Button restartButton;
@@ -27,7 +27,7 @@ public class PauseScreen : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            if (GameIsPaused)
+            if (gameIsPaused)
             {
                 Resume();
             }
@@ -42,25 +42,31 @@ public class PauseScreen : MonoBehaviour
     {
         backgroundObject.SetActive(true);
         Time.timeScale = 0f;
-        GameIsPaused = true;
+        gameIsPaused = true;
     }
 
     private void Resume()
     {
         backgroundObject.SetActive(false);
-        Time.timeScale = 1f;
-        GameIsPaused = false;
+        ToNormalSpeed();
+        gameIsPaused = false;
     }
+
 
     private void Restart()
     {
-        Time.timeScale = 1f;
+        ToNormalSpeed();
         gameManager.Restart();
     }
 
     private void Quit()
     {
-        Time.timeScale = 1f;
+        ToNormalSpeed();
         gameManager.Quit();
+    }
+
+    private static void ToNormalSpeed()
+    {
+        Time.timeScale = 1f;
     }
 }

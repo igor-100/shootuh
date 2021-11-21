@@ -2,21 +2,23 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using CharacterStats;
 
 public class Enemy : MonoBehaviour, IAlive
 {
     private const string AttackTrigger = "attack";
     private const string WalkTrigger = "walk";
     private const string PlayerMaskName = "Player";
-    [SerializeField] private int health = 100;
-    [SerializeField] private int damage = 20;
+
+    public CharacterStat Health;
+    [SerializeField] private float damage = 20f;
     [SerializeField] private float moveSpeed = 5f;
     [SerializeField] private float hitHeight = 0.5f;
     [SerializeField] private float deathTime = 2f;
     [SerializeField] private float attackTime = 1f;
     [SerializeField] private float attackRange = 5f;
 
-    private int currentHealth;
+    private float currentHealth;
     private bool isDead;
     private bool isAttacking;
     private bool isWalking;
@@ -26,11 +28,11 @@ public class Enemy : MonoBehaviour, IAlive
     private Transform targetTransform;
     private BoxCollider boxCollider;
 
-    public int Damage { get => damage; }
+    public float Damage { get => damage; }
 
     public float GetHealthPercent()
     {
-        return (float)currentHealth / health;
+        return (float)currentHealth / Health.BaseValue;
     }
 
     void Awake()
@@ -44,7 +46,7 @@ public class Enemy : MonoBehaviour, IAlive
     {
         boxCollider.enabled = true;
         isDead = false;
-        currentHealth = health;
+        currentHealth = Health.BaseValue;
     }
 
     private void Start()

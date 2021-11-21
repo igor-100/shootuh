@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class Projectile : MonoBehaviour
 {
-    [SerializeField] private int damage = 20;
+    [SerializeField] private float damage = 20f;
 
-    public int Damage { get => damage; }
+    public float Damage { get => damage; }
 
     private void OnCollisionEnter(Collision collision)
     {
