@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using CharacterStats;
 
 public class Enemy : MonoBehaviour, IAlive
 {
@@ -10,7 +9,7 @@ public class Enemy : MonoBehaviour, IAlive
     private const string WalkTrigger = "walk";
     private const string PlayerMaskName = "Player";
 
-    public CharacterStat Health;
+    [SerializeField] private CharacterStat health;
     [SerializeField] private float damage = 20f;
     [SerializeField] private float moveSpeed = 5f;
     [SerializeField] private float hitHeight = 0.5f;
@@ -29,11 +28,7 @@ public class Enemy : MonoBehaviour, IAlive
     private BoxCollider boxCollider;
 
     public float Damage { get => damage; }
-
-    public float GetHealthPercent()
-    {
-        return (float)currentHealth / Health.BaseValue;
-    }
+    public float HealthPercent => (float)currentHealth / health.BaseValue;
 
     void Awake()
     {
@@ -46,7 +41,7 @@ public class Enemy : MonoBehaviour, IAlive
     {
         boxCollider.enabled = true;
         isDead = false;
-        currentHealth = Health.BaseValue;
+        currentHealth = health.BaseValue;
     }
 
     private void Start()

@@ -1,10 +1,7 @@
 using UnityEngine;
 
-public class CameraFollow : MonoBehaviour
+public class GameCamera : MonoBehaviour, IGameCamera
 {
-    [SerializeField]
-    private Transform target;
-
     [Range(0f, 30f)]
     [SerializeField]
     private float smoothSpeed = 10f;
@@ -15,9 +12,11 @@ public class CameraFollow : MonoBehaviour
     [SerializeField]
     private Vector3 cameraAngle;
 
-    public Vector3 GetOffset()
+    private Transform target;
+
+    public void SetTarget(Transform target)
     {
-        return offset;
+        this.target = target;
     }
 
     private void Start()

@@ -4,5 +4,5 @@ using UnityEngine;
 
 public interface IAlive
 {
-    float GetHealthPercent();
+    float HealthPercent { get; }
 }

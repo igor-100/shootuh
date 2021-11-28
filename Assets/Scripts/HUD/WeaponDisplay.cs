@@ -21,6 +21,7 @@ public class WeaponDisplay : MonoBehaviour
 
     private void Start()
     {
+        // GameManager.hasPlayer.hasWeapon?
         weaponHolder = FindObjectOfType<WeaponHolder>();
         ammoTextComponent = transform.Find(AmmoText).GetComponent<TextMeshProUGUI>();
         weaponTextComponent = transform.Find(WeaponText).GetComponent<TextMeshProUGUI>();

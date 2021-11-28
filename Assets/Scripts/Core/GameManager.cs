@@ -6,7 +6,7 @@ public class GameManager : MonoBehaviour
 {
     [SerializeField] private GameOverScreen gameOverScreen;
 
-    private SceneLoader sceneLoader;
+    private ISceneLoader sceneLoader;
 
     private void Start()
     {

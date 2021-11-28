@@ -1,21 +1,18 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using CharacterStats;
 
-public class Warrior : MonoBehaviour, IAlive
+public class Warrior : MonoBehaviour, IWarrior
 {
     private const float GameOverDelay = 2f;
 
-    public CharacterStat Health;
+    [SerializeField] private CharacterStat health;
 
     private float currentHealth;
     private GameManager gameManager;
 
-    public float GetHealthPercent()
-    {
-        return (float)currentHealth / Health.BaseValue;
-    }
+    public Transform Transform => transform;
+    public float HealthPercent => (float)currentHealth / health.BaseValue;
 
     public void Hit(float damage)
     {
@@ -31,13 +28,7 @@ public class Warrior : MonoBehaviour, IAlive
     private void Start()
     {
         gameManager = FindObjectOfType<GameManager>();
-        currentHealth = Health.BaseValue;
-    }
-
-    // Update is called once per frame
-    private void Update()
-    {
-
+        currentHealth = health.BaseValue;
     }
 
     private void EndGame()
