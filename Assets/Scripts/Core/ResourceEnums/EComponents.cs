@@ -1,5 +1,7 @@
 public enum EComponents
 {
     Main_Camera,
-    Warrior
+    Warrior,
+    Enemy_HM,
+    Enemy_Spawner
 }

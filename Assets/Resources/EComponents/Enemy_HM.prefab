@@ -782,7 +782,7 @@ GameObject:
   - component: {fileID: 5105870900216296197}
   - component: {fileID: 4859384736950385737}
   m_Layer: 7
-  m_Name: Enemy HM
+  m_Name: Enemy_HM
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -864,7 +864,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 178252}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 593f5917341c0c046ae96a521b5cb185, type: 3}
+  m_Script: {fileID: 11500000, guid: 6923f45ca61f0df409e2ff4713151b3b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   health:
@@ -873,7 +873,7 @@ MonoBehaviour:
   moveSpeed: 5
   hitHeight: 0.5
   deathTime: 2
-  attackTime: 0.8
+  attackTime: 1
   attackRange: 5
 --- !u!1 &179512
 GameObject:

@@ -12,12 +12,7 @@ public class GameCamera : MonoBehaviour, IGameCamera
     [SerializeField]
     private Vector3 cameraAngle;
 
-    private Transform target;
-
-    public void SetTarget(Transform target)
-    {
-        this.target = target;
-    }
+    public Transform Target { get; set; }
 
     private void Start()
     {
@@ -26,7 +21,8 @@ public class GameCamera : MonoBehaviour, IGameCamera
 
     private void FixedUpdate()
     {
-        var desiredPosition = target.position + offset;
+        // if target null
+        var desiredPosition = Target.position + offset;
         var smoothedPosition = Vector3.Lerp(transform.position, desiredPosition, smoothSpeed * Time.deltaTime);
         transform.position = smoothedPosition;
     }

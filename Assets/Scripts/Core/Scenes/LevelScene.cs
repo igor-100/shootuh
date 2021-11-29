@@ -10,10 +10,13 @@ public class LevelScene : MonoBehaviour
     {
         gameCam = CompositionRoot.GetGameCamera();
         warrior = CompositionRoot.GetWarrior();
+        var enemySpawner = CompositionRoot.GetEnemySpawner();
     }
 
     private void Start()
     {
-        gameCam.SetTarget(warrior.Transform);
+        // Difference between these 2?
+        // gameCam.SetTarget(warrior.Transform);
+        gameCam.Target = warrior.Transform;
     }
 }

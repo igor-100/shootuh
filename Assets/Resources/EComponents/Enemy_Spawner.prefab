@@ -10,9 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1052523108912181688}
   - component: {fileID: 1052523108912181687}
-  - component: {fileID: 1052523108912181686}
   m_Layer: 0
-  m_Name: Enemy Spawner
+  m_Name: Enemy_Spawner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -41,25 +40,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1052523108912181689}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9a6d6bcc49037564d800b9ca0657ffd2, type: 3}
+  m_Script: {fileID: 11500000, guid: edfd11dc8b3bc1544935b571ffbfc518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyPrefab: {fileID: 178252, guid: 1d96687606641d8448ec351d83deb5a3, type: 3}
   minSpawnDelay: 0.5
-  maxSpawnDelay: 2
+  maxSpawnDelay: 2.5
   maxSpawnXDistance: 75
   maxSpawnZDistance: 75
---- !u!114 &1052523108912181686
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1052523108912181689}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aa45bf91a44e62b46ab33c2a18b4d267, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  objectToPool: {fileID: 178252, guid: 1d96687606641d8448ec351d83deb5a3, type: 3}
-  amountToPool: 50

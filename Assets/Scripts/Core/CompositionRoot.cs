@@ -7,6 +7,8 @@ public class CompositionRoot : MonoBehaviour
     //private static IUIRoot UIRoot;
     private static IWarrior Warrior;
     private static GameObject WarriorGameObject;
+    private static GameObject EnemyGameObject;
+    private static IEnemySpawner EnemySpawner;
     //private static IUserInput UserInput;
     private static IGameCamera GameCamera;
     //private static IViewFactory ViewFactory;
@@ -19,15 +21,11 @@ public class CompositionRoot : MonoBehaviour
     //private static IMainMenuScreen MainMenuScreen;
     //private static IPauseScreen PauseScreen;
 
-    static CompositionRoot()
-    {
-        ResourceManager = GetResourceManager();
-    }
-
     private void OnDestroy()
     {
         //UIRoot = null;
         Warrior = null;
+        EnemySpawner = null;
         //UserInput = null;
         GameCamera = null;
         //ViewFactory = null;
@@ -37,6 +35,9 @@ public class CompositionRoot : MonoBehaviour
         //GameOverScreen = null;
         //MainMenuScreen = null;
         //PauseScreen = null;
+
+        var resourceManager = GetResourceManager();
+        resourceManager.ResetPools();
     }
 
     public static IResourceManager GetResourceManager()
@@ -53,7 +54,8 @@ public class CompositionRoot : MonoBehaviour
     {
         if (GameCamera == null)
         {
-            GameCamera = ResourceManager.CreatePrefabInstance<GameCamera, EComponents>(EComponents.Main_Camera);
+            var resourceManager = GetResourceManager();
+            GameCamera = resourceManager.CreatePrefabInstance<IGameCamera, EComponents>(EComponents.Main_Camera);
         }
 
         return GameCamera;
@@ -63,10 +65,22 @@ public class CompositionRoot : MonoBehaviour
     {
         if (Warrior == null)
         {
-            Warrior = ResourceManager.CreatePrefabInstance<Warrior, EComponents>(EComponents.Warrior);
+            var resourceManager = GetResourceManager();
+            Warrior = resourceManager.CreatePrefabInstance<IWarrior, EComponents>(EComponents.Warrior);
         }
 
         return Warrior;
+    }
+
+    public static IEnemySpawner GetEnemySpawner()
+    {
+        if (EnemySpawner == null)
+        {
+            var resourceManager = GetResourceManager();
+            EnemySpawner = resourceManager.CreatePrefabInstance<IEnemySpawner, EComponents>(EComponents.Enemy_Spawner);
+        }
+
+        return EnemySpawner;
     }
 
     //public static ISceneLoader GetSceneLoader()

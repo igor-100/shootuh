@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Enemy : MonoBehaviour, IAlive
+public class Enemy : MonoBehaviour, IEnemy
 {
     private const string AttackTrigger = "attack";
     private const string WalkTrigger = "walk";
@@ -29,6 +29,7 @@ public class Enemy : MonoBehaviour, IAlive
 
     public float Damage { get => damage; }
     public float HealthPercent => (float)currentHealth / health.BaseValue;
+    public Transform TargetTransform { get => targetTransform; set => targetTransform = value; }
 
     void Awake()
     {
@@ -44,20 +45,6 @@ public class Enemy : MonoBehaviour, IAlive
         currentHealth = health.BaseValue;
     }
 
-    private void Start()
-    {
-        var warrior = FindObjectOfType<Warrior>();
-        if (warrior)
-        {
-            targetTransform = warrior.transform;
-        }
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
     void FixedUpdate()
     {
         // TODO: State Machine? States: idle, dying, attacking, moving
