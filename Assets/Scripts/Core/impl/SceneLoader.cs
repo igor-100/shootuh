@@ -3,7 +3,7 @@ using UnityEngine.SceneManagement;
 
 public class SceneLoader : MonoBehaviour, ISceneLoader
 {
-    int currentSceneIndex;
+    private int currentSceneIndex;
 
     private void Start()
     {
@@ -14,6 +14,11 @@ public class SceneLoader : MonoBehaviour, ISceneLoader
     {
         currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
         SceneManager.LoadScene(++currentSceneIndex);
+    }
+
+    public void LoadScene(EScenes scene)
+    {
+        SceneManager.LoadScene(scene.ToString());
     }
 
     public void LoadScene(string sceneName)

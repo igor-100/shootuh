@@ -1,4 +1,4 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -11,6 +11,7 @@ public class Warrior : MonoBehaviour, IWarrior
     private float currentHealth;
     private GameManager gameManager;
 
+    public event Action Died = () => { };
     public Transform Transform => transform;
     public float HealthPercent => (float)currentHealth / health.BaseValue;
 
@@ -33,7 +34,7 @@ public class Warrior : MonoBehaviour, IWarrior
 
     private void EndGame()
     {
-        gameManager.GameOver();
+        Died();
     }
 
     private void Die()

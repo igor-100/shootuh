@@ -3,20 +3,32 @@ using UnityEngine;
 
 public class LevelScene : MonoBehaviour
 {
-    private IGameCamera gameCam;
-    private IWarrior warrior;
+    private IGameCamera GameCam;
+    private IWarrior Warrior;
+    private IGameOverScreen GameOverScreen;
 
     private void Awake()
     {
-        gameCam = CompositionRoot.GetGameCamera();
-        warrior = CompositionRoot.GetWarrior();
+        GameCam = CompositionRoot.GetGameCamera();
+        Warrior = CompositionRoot.GetWarrior();
+        
         var enemySpawner = CompositionRoot.GetEnemySpawner();
+        var environment = CompositionRoot.GetEnvironment();
+        var uiRoot = CompositionRoot.GetUIRoot();
+
+        GameOverScreen = CompositionRoot.GetGameOverScreen();
+        GameOverScreen.Hide();
+
+        Warrior.Died += OnPlayerDied;
     }
 
     private void Start()
     {
-        // Difference between these 2?
-        // gameCam.SetTarget(warrior.Transform);
-        gameCam.Target = warrior.Transform;
+        GameCam.Target = Warrior.Transform;
+    }
+
+    private void OnPlayerDied()
+    {
+        GameOverScreen.Show();
     }
 }

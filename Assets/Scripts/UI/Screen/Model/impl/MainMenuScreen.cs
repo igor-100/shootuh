@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class MainMenuScreen : MonoBehaviour
+public class MainMenuScreen : MonoBehaviour, IMainMenuScreen
 {
     [SerializeField] private Button startButton;
     [SerializeField] private Button quitButton;
