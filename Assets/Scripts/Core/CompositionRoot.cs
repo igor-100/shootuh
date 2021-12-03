@@ -141,6 +141,17 @@ public class CompositionRoot : MonoBehaviour
         return GameOverScreen;
     }
 
+    public static IPauseScreen GetPauseScreen()
+    {
+        if (PauseScreen == null)
+        {
+            var gameObject = new GameObject("PauseScreen");
+            PauseScreen = gameObject.AddComponent<PauseScreen>();
+        }
+
+        return PauseScreen;
+    }
+
     //public static ISceneLoader GetSceneLoader()
     //{
     //    if (SceneLoader == null)

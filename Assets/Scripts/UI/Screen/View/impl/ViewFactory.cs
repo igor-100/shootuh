@@ -18,4 +18,12 @@
 
         return view;
     }
+
+    public IPauseScreenView CreatePauseScreen()
+    {
+        var view = ResourceManager.CreatePrefabInstance<IPauseScreenView, EViews>(EViews.Pause_Screen);
+        view.SetParent(UIRoot.MainCanvas);
+
+        return view;
+    }
 }

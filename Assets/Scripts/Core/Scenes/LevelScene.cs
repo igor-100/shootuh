@@ -6,6 +6,7 @@ public class LevelScene : MonoBehaviour
     private IGameCamera GameCam;
     private IWarrior Warrior;
     private IGameOverScreen GameOverScreen;
+    private IPauseScreen PauseScreen;
 
     private void Awake()
     {
@@ -18,6 +19,8 @@ public class LevelScene : MonoBehaviour
 
         GameOverScreen = CompositionRoot.GetGameOverScreen();
         GameOverScreen.Hide();
+        PauseScreen = CompositionRoot.GetPauseScreen();
+        PauseScreen.Hide();
 
         Warrior.Died += OnPlayerDied;
     }

@@ -1,4 +1,3 @@
-public interface IPauseScreen
+public interface IPauseScreen : IScreen
 {
-    
 }

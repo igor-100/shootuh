@@ -1,4 +1,5 @@
 public enum EViews
 {
-    GameOver_Screen
+    GameOver_Screen,
+    Pause_Screen
 }

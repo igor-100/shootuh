@@ -1,30 +1,27 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class PauseScreen : MonoBehaviour, IPauseScreen
 {
     private static bool gameIsPaused = false;
 
-    [SerializeField] private Button resumeButton;
-    [SerializeField] private Button restartButton;
-    [SerializeField] private Button quitButton;
+    private IPauseScreenView View;
+    private ISceneLoader SceneLoader;
 
-    private GameObject backgroundObject;
-    private GameManager gameManager;
-
-    private void Start()
+    private void Awake()
     {
-        backgroundObject = transform.Find("Background").gameObject;
-        gameManager = FindObjectOfType<GameManager>();
-        resumeButton.onClick.AddListener(Resume);
-        restartButton.onClick.AddListener(Restart);
-        quitButton.onClick.AddListener(Quit);
+        SceneLoader = CompositionRoot.GetSceneLoader();
+        var viewFactory = CompositionRoot.GetViewFactory();
+
+        View = viewFactory.CreatePauseScreen();
+
+        View.ResumeClicked += OnResumeClicked;
+        View.RestartClicked += OnRestartClicked;
+        View.QuitClicked += OnQuitClicked;
     }
 
     private void Update()
     {
+        // TODO: InputManager
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             if (gameIsPaused)
@@ -38,31 +35,45 @@ public class PauseScreen : MonoBehaviour, IPauseScreen
         }
     }
 
+    private void OnQuitClicked()
+    {
+        ToNormalSpeed();
+        SceneLoader.LoadScene(EScenes.StartScene);
+    }
+
+    private void OnResumeClicked()
+    {
+        Resume();
+    }
+
+    private void OnRestartClicked()
+    {
+        ToNormalSpeed();
+        SceneLoader.RestartScene();
+    }
+
+    public void Hide()
+    {
+        View.Hide();
+    }
+
+    public void Show()
+    {
+        View.Show();
+    }
+
     private void Pause()
     {
-        backgroundObject.SetActive(true);
+        Show();
         Time.timeScale = 0f;
         gameIsPaused = true;
     }
 
     private void Resume()
     {
-        backgroundObject.SetActive(false);
+        Hide();
         ToNormalSpeed();
         gameIsPaused = false;
-    }
-
-
-    private void Restart()
-    {
-        ToNormalSpeed();
-        gameManager.Restart();
-    }
-
-    private void Quit()
-    {
-        ToNormalSpeed();
-        gameManager.Quit();
     }
 
     private static void ToNormalSpeed()
