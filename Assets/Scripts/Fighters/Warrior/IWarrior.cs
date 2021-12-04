@@ -1,10 +1,8 @@
 using System;
 using UnityEngine;
 
-public interface IWarrior : IAlive
+public interface IWarrior : IAlive, IMovable, IAttack
 {
-    Transform Transform { get; }
     WeaponHolder WeaponHolder { get; }
-    event Action Died;
     void Hit(float damage);
 }

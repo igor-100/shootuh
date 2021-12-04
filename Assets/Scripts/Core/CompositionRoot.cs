@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.EventSystems;
 
 public class CompositionRoot : MonoBehaviour
@@ -172,24 +171,4 @@ public class CompositionRoot : MonoBehaviour
 
         return HUD;
     }
-
-    //public static ISceneLoader GetSceneLoader()
-    //{
-    //    if (SceneLoader == null)
-    //    {
-    //        SceneLoader = new SceneLoader();
-    //    }
-
-    //    return SceneLoader;
-    //}
-    
-    //public static IUIRoot GetResourceManager()
-    //{
-    //    if (UIRoot == null)
-    //    {
-    //        UIRoot = new UIRoot();
-    //    }
-
-    //    return UIRoot;
-    //}
 }

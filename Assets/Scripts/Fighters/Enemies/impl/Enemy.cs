@@ -1,6 +1,5 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Enemy : MonoBehaviour, IEnemy
@@ -8,6 +7,9 @@ public class Enemy : MonoBehaviour, IEnemy
     private const string AttackTrigger = "attack";
     private const string WalkTrigger = "walk";
     private const string PlayerMaskName = "Player";
+
+    public event Action Died;
+    public event Action<float> HealthPercentChanged;
 
     [SerializeField] private CharacterStat health;
     [SerializeField] private float damage = 20f;
@@ -28,7 +30,6 @@ public class Enemy : MonoBehaviour, IEnemy
     private BoxCollider boxCollider;
 
     public float Damage { get => damage; }
-    public float HealthPercent => (float)currentHealth / health.BaseValue;
     public Transform TargetTransform { get => targetTransform; set => targetTransform = value; }
 
     void Awake()
@@ -112,6 +113,7 @@ public class Enemy : MonoBehaviour, IEnemy
         if (projectile)
         {
             currentHealth -= projectile.Damage;
+            HealthPercentChanged((float)currentHealth / health.BaseValue);
             if (currentHealth <= 0)
             {
                 currentHealth = 0;
