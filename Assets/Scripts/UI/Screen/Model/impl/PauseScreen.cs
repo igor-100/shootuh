@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class PauseScreen : MonoBehaviour, IPauseScreen
 {
+    // TODO: Extract to some State Service
     private static bool gameIsPaused = false;
 
     private IPauseScreenView View;

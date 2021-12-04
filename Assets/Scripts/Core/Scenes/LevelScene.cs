@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class LevelScene : MonoBehaviour
 {
@@ -38,4 +37,6 @@ public class LevelScene : MonoBehaviour
         GameOverScreen.Show();
         HUD.Hide();
     }
+
+    // OnGamePaused() from InputManager
 }

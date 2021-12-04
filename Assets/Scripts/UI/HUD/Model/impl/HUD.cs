@@ -4,12 +4,12 @@ public class HUD : MonoBehaviour, IHUD
 {
     private const string TrailComponent = "Trail";
 
+    private IHUDView View;
+
     private Weapon currentWeapon;
     private WeaponHolder weaponHolder;
     private int currentAmmo;
     private Color currentColor;
-
-    private IHUDView View;
 
     private void Awake()
     {
@@ -48,7 +48,7 @@ public class HUD : MonoBehaviour, IHUD
 
     private void UpdateColor()
     {
-        // Add configuration for projectile
+        // Add color configuration for projectile
         currentColor = currentWeapon.PfProjectile.transform.Find(TrailComponent).GetComponent<TrailRenderer>().startColor;
         View.SetAmmoAndWeaponTextColor(currentColor);
     }
