@@ -11,6 +11,7 @@ public class WeaponHolder : MonoBehaviour
     private int currentAmmo;
 
     public Weapon CurrentWeapon { get => currentWeapon; }
+    public int CurrentAmmo { get => currentAmmo; }
 
     // Start is called before the first frame update
     void Start()

@@ -269,7 +269,7 @@ GameObject:
   - component: {fileID: 6489433401304708295}
   - component: {fileID: 6489433401304708312}
   m_Layer: 5
-  m_Name: Main_Menu
+  m_Name: MainMenu_Screen
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

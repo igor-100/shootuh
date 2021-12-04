@@ -6,13 +6,15 @@ public class Warrior : MonoBehaviour, IWarrior
 {
     private const float GameOverDelay = 2f;
 
+    public event Action Died = () => { };
+
     [SerializeField] private CharacterStat health;
+    [SerializeField] private WeaponHolder weaponHolder;
 
     private float currentHealth;
-    private GameManager gameManager;
 
-    public event Action Died = () => { };
     public Transform Transform => transform;
+    public WeaponHolder WeaponHolder => weaponHolder;
     public float HealthPercent => (float)currentHealth / health.BaseValue;
 
     public void Hit(float damage)
@@ -28,7 +30,6 @@ public class Warrior : MonoBehaviour, IWarrior
     // Start is called before the first frame update
     private void Start()
     {
-        gameManager = FindObjectOfType<GameManager>();
         currentHealth = health.BaseValue;
     }
 

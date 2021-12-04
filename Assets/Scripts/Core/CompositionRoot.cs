@@ -122,9 +122,8 @@ public class CompositionRoot : MonoBehaviour
         {
             var uiRoot = GetUIRoot();
             var resourceManager = GetResourceManager();
-            var sceneLoader = GetSceneLoader();
 
-            ViewFactory = new ViewFactory(uiRoot, resourceManager, sceneLoader);
+            ViewFactory = new ViewFactory(uiRoot, resourceManager);
         }
 
         return ViewFactory;
@@ -150,6 +149,28 @@ public class CompositionRoot : MonoBehaviour
         }
 
         return PauseScreen;
+    }
+
+    public static IMainMenuScreen GetMainMenuScreen()
+    {
+        if (MainMenuScreen == null)
+        {
+            var gameObject = new GameObject("MainMenuScreen");
+            MainMenuScreen = gameObject.AddComponent<MainMenuScreen>();
+        }
+
+        return MainMenuScreen;
+    }
+
+    public static IHUD GetHUD()
+    {
+        if (HUD == null)
+        {
+            var gameObject = new GameObject("HUD");
+            HUD = gameObject.AddComponent<HUD>();
+        }
+
+        return HUD;
     }
 
     //public static ISceneLoader GetSceneLoader()

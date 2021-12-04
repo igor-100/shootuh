@@ -1,4 +1,3 @@
-public interface IMainMenuScreen
+public interface IMainMenuScreen : IScreen
 {
-
 }

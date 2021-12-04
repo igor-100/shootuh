@@ -2501,6 +2501,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   health:
     BaseValue: 100
+  weaponHolder: {fileID: 5110899697263658488}
 --- !u!114 &1502391624
 MonoBehaviour:
   m_ObjectHideFlags: 0

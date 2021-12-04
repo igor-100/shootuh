@@ -5,13 +5,37 @@ using UnityEngine.UI;
 
 public class MainMenuScreen : MonoBehaviour, IMainMenuScreen
 {
-    [SerializeField] private Button startButton;
-    [SerializeField] private Button quitButton;
+    private IMainMenuScreenView View;
+    private ISceneLoader SceneLoader;
 
-    private void Start()
+    private void Awake()
     {
-        var sceneLoader = FindObjectOfType<SceneLoader>();
-        startButton.onClick.AddListener(sceneLoader.LoadNextScene);
-        quitButton.onClick.AddListener(sceneLoader.Quit);
+        SceneLoader = CompositionRoot.GetSceneLoader();
+        var viewFactory = CompositionRoot.GetViewFactory();
+
+        View = viewFactory.CreateMainMenuScreen();
+
+        View.StartClicked += OnStartClicked;
+        View.QuitClicked += OnQuitClicked;
+    }
+
+    private void OnQuitClicked()
+    {
+        SceneLoader.Quit();
+    }
+
+    private void OnStartClicked()
+    {
+        SceneLoader.LoadNextScene();
+    }
+
+    public void Hide()
+    {
+        View.Hide();
+    }
+
+    public void Show()
+    {
+        View.Show();
     }
 }

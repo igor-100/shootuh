@@ -7,6 +7,7 @@ public class LevelScene : MonoBehaviour
     private IWarrior Warrior;
     private IGameOverScreen GameOverScreen;
     private IPauseScreen PauseScreen;
+    private IHUD HUD;
 
     private void Awake()
     {
@@ -17,6 +18,8 @@ public class LevelScene : MonoBehaviour
         var environment = CompositionRoot.GetEnvironment();
         var uiRoot = CompositionRoot.GetUIRoot();
 
+        HUD = CompositionRoot.GetHUD();
+        HUD.Show();
         GameOverScreen = CompositionRoot.GetGameOverScreen();
         GameOverScreen.Hide();
         PauseScreen = CompositionRoot.GetPauseScreen();
@@ -33,5 +36,6 @@ public class LevelScene : MonoBehaviour
     private void OnPlayerDied()
     {
         GameOverScreen.Show();
+        HUD.Hide();
     }
 }
