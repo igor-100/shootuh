@@ -1,21 +1,39 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class WeaponHolder : MonoBehaviour
 {
     [SerializeField] private int selectedWeaponId = 0;
 
+    public event Action<Weapon> SelectedWeaponChanged = weapon => { };
+
+    private IPlayerInput PlayerInput;
+
     private Weapon currentWeapon;
-    private int currentAmmo;
 
     public Weapon CurrentWeapon { get => currentWeapon; }
-    public int CurrentAmmo { get => currentAmmo; }
 
-    // Start is called before the first frame update
-    void Start()
+    private void Awake()
     {
+        PlayerInput = CompositionRoot.GetPlayerInput();
+        PlayerInput.MouseWheelScrolled += OnMouseScrollWheel;
+        PlayerInput.KeyAlphaPressed += OnKeyAlpha;
+    }
+
+    private void Start()
+    {
+        SelectWeapon();
+    }
+
+    private void OnMouseScrollWheel(float axisValue)
+    {
+        MouseWheelSelect(axisValue);
+        SelectWeapon();
+    }
+
+    private void OnKeyAlpha(int keyAlpha)
+    {
+        KeyAlphaSelect(keyAlpha);
         SelectWeapon();
     }
 
@@ -35,26 +53,12 @@ public class WeaponHolder : MonoBehaviour
             }
             i++;
         }
+        SelectedWeaponChanged(currentWeapon);
     }
 
-    // Update is called once per frame
-    void Update()
+    private void MouseWheelSelect(float axisValue)
     {
-        int previousSelectedWeaponId = selectedWeaponId;
-
-        MouseWheelInput();
-        KeyAlphaInput();
-
-        if (previousSelectedWeaponId != selectedWeaponId)
-        {
-            SelectWeapon();
-        }
-        currentAmmo = currentWeapon.CurrentAmmo;
-    }
-
-    private void MouseWheelInput()
-    {
-        if (Input.GetAxis("Mouse ScrollWheel") > 0f)
+        if (axisValue > 0f)
         {
             if (selectedWeaponId >= transform.childCount - 1)
             {
@@ -65,7 +69,7 @@ public class WeaponHolder : MonoBehaviour
                 selectedWeaponId++;
             }
         }
-        if (Input.GetAxis("Mouse ScrollWheel") < 0f)
+        else
         {
             if (selectedWeaponId <= 0)
             {
@@ -79,21 +83,19 @@ public class WeaponHolder : MonoBehaviour
     }
 
 
-    private void KeyAlphaInput()
+    private void KeyAlphaSelect(int keyAlpha)
     {
-        if (Input.GetKeyDown(KeyCode.Alpha1))
+        switch (keyAlpha)
         {
-            selectedWeaponId = 0;
-        }
-
-        if (Input.GetKeyDown(KeyCode.Alpha2) && transform.childCount >= 2)
-        {
-            selectedWeaponId = 1;
-        }
-
-        if (Input.GetKeyDown(KeyCode.Alpha3) && transform.childCount >= 3)
-        {
-            selectedWeaponId = 2;
+            case 1:
+                selectedWeaponId = 0;
+                break;
+            case 2:
+                selectedWeaponId = 1;
+                break;
+            case 3:
+                selectedWeaponId = 2;
+                break;
         }
     }
 }

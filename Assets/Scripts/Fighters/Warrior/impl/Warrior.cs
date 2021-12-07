@@ -16,7 +16,7 @@ public class Warrior : MonoBehaviour, IWarrior
     public Transform Transform => transform;
     public WeaponHolder WeaponHolder => weaponHolder;
 
-    private void Awake()
+    private void Start()
     {
         currentHealth = health.BaseValue;
     }

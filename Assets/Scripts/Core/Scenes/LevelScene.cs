@@ -12,7 +12,8 @@ public class LevelScene : MonoBehaviour
     {
         GameCam = CompositionRoot.GetGameCamera();
         Warrior = CompositionRoot.GetWarrior();
-        
+
+        var playerInput = CompositionRoot.GetPlayerInput();
         var enemySpawner = CompositionRoot.GetEnemySpawner();
         var environment = CompositionRoot.GetEnvironment();
         var uiRoot = CompositionRoot.GetUIRoot();

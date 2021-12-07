@@ -7,7 +7,7 @@ public class CompositionRoot : MonoBehaviour
     private static IWarrior Warrior;
     private static IEnemySpawner EnemySpawner;
     private static GameObject EnvironmentGameObject;
-    //private static IUserInput UserInput;
+    private static IPlayerInput PlayerInput;
     private static IGameCamera GameCamera;
     private static IViewFactory ViewFactory;
     private static ISceneLoader SceneLoader;
@@ -25,7 +25,7 @@ public class CompositionRoot : MonoBehaviour
         Warrior = null;
         EnemySpawner = null;
         EnvironmentGameObject = null;
-        //UserInput = null;
+        PlayerInput = null;
         GameCamera = null;
         ViewFactory = null;
         //EventSystem = null;
@@ -170,5 +170,16 @@ public class CompositionRoot : MonoBehaviour
         }
 
         return HUD;
+    }
+
+    public static IPlayerInput GetPlayerInput()
+    {
+        if (PlayerInput == null)
+        {
+            var gameObject = new GameObject("PlayerInput");
+            PlayerInput = gameObject.AddComponent<PlayerInput>();
+        }
+
+        return PlayerInput;
     }
 }

@@ -4,40 +4,45 @@ public class HUD : MonoBehaviour, IHUD
 {
     private const string TrailComponent = "Trail";
 
-    private IHUDView View;
+    private IWarrior Warrior;
 
-    private Weapon currentWeapon;
-    private WeaponHolder weaponHolder;
-    private int currentAmmo;
-    private Color currentColor;
+    private IHUDView View;
 
     private void Awake()
     {
-        var warrior = CompositionRoot.GetWarrior();
-        weaponHolder = warrior.WeaponHolder;
-        currentWeapon = weaponHolder.CurrentWeapon;
-
+        Warrior = CompositionRoot.GetWarrior();
         var viewFactory = CompositionRoot.GetViewFactory();
         View = viewFactory.CreateHUD();
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Start()
     {
-        // TODO: On change event
-        if (currentWeapon != weaponHolder.CurrentWeapon)
-        {
-            currentWeapon = weaponHolder.CurrentWeapon;
-            UpdateColor();
-            UpdateWeaponText();
-        }
-        // TODO: On change event
-        UpdateAmmoText();
+        var weaponHolder = Warrior.WeaponHolder;
+        weaponHolder.SelectedWeaponChanged += OnSelectedWeaponChange;
+
+        var currentWeapon = weaponHolder.CurrentWeapon;
+        currentWeapon.CurrentAmmoChanged += OnAmmoChange;
+
+        UpdateColor(currentWeapon);
+        UpdateWeaponText(currentWeapon);
+        UpdateAmmoText(currentWeapon.CurrentAmmo);
     }
 
-    private void UpdateAmmoText()
+    private void OnSelectedWeaponChange(Weapon currentWeapon)
     {
-        currentAmmo = currentWeapon.CurrentAmmo;
+        currentWeapon.CurrentAmmoChanged += OnAmmoChange;
+        UpdateAmmoText(currentWeapon.CurrentAmmo);
+        UpdateColor(currentWeapon);
+        UpdateWeaponText(currentWeapon);
+    }
+
+    private void OnAmmoChange(int currentAmmo)
+    {
+        UpdateAmmoText(currentAmmo);
+    }
+
+    private void UpdateAmmoText(int currentAmmo)
+    {
         string currentAmmoText = "0" + currentAmmo;
         if (currentAmmo < 10)
         {
@@ -46,16 +51,16 @@ public class HUD : MonoBehaviour, IHUD
         View.SetAmmoText(currentAmmoText);
     }
 
-    private void UpdateColor()
+    private void UpdateColor(Weapon weapon)
     {
         // Add color configuration for projectile
-        currentColor = currentWeapon.PfProjectile.transform.Find(TrailComponent).GetComponent<TrailRenderer>().startColor;
-        View.SetAmmoAndWeaponTextColor(currentColor);
+        var color = weapon.PfProjectile.transform.Find(TrailComponent).GetComponent<TrailRenderer>().startColor;
+        View.SetAmmoAndWeaponTextColor(color);
     }
 
-    private void UpdateWeaponText()
+    private void UpdateWeaponText(Weapon weapon)
     {
-        View.SetWeaponText(currentWeapon.ModeName);
+        View.SetWeaponText(weapon.ModeName);
     }
 
     public void Hide()

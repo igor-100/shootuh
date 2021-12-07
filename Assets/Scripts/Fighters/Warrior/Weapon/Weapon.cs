@@ -1,18 +1,19 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Weapon : MonoBehaviour
 {
-    private const string FireButton = "Fire1";
-
     [SerializeField] private int maxAmmo = 20;
     [SerializeField] private float projectileSpeed = 30f;
     [SerializeField] private float fireRate = 15f;
     [SerializeField] private float reloadTime = 1f;
     [SerializeField] private Projectile pfProjectile;
     [SerializeField] private string modeName;
+
+    public event Action<int> CurrentAmmoChanged;
+
+    private IPlayerInput PlayerInput;
 
     private float nextTimeToFire = 0f;
     private int currentAmmo;
@@ -22,27 +23,32 @@ public class Weapon : MonoBehaviour
     public Projectile PfProjectile { get => pfProjectile; }
     public string ModeName { get => modeName; }
 
-    private void Start()
+    private void Awake()
     {
+        PlayerInput = CompositionRoot.GetPlayerInput();
+
         currentAmmo = maxAmmo;
     }
-    // Update is called once per frame
-    void Update()
+
+    private void OnEnable()
     {
-        if (!isReloading)
-        {
-            Fire();
-        }
-        Reload();
+        PlayerInput.Fire += OnFire;
+        PlayerInput.Reload += OnReload;
     }
 
-    private void Fire()
+    private void OnDisable()
     {
-        if (Input.GetButton(FireButton) && currentAmmo != 0 && Time.time >= nextTimeToFire)
+        PlayerInput.Fire -= OnFire;
+        PlayerInput.Reload -= OnReload;
+    }
+
+    private void OnFire()
+    {
+        if (!isReloading && currentAmmo != 0 && Time.time >= nextTimeToFire)
         {
             nextTimeToFire = Time.time + 1f / fireRate;
             ShootProjectile();
-            currentAmmo--;
+            CurrentAmmoChanged(--currentAmmo);
         }
     }
 
@@ -57,19 +63,16 @@ public class Weapon : MonoBehaviour
         projectileObj.GetComponent<Rigidbody>().velocity = transform.parent.forward * projectileSpeed;
     }
 
-    private void Reload()
+    private void OnReload()
     {
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-            StartCoroutine(WaitForReloading());
-        }
+        StartCoroutine(WaitForReloading());
     }
 
     private IEnumerator WaitForReloading()
     {
         isReloading = true;
         yield return new WaitForSeconds(reloadTime);
-        currentAmmo = maxAmmo;
+        CurrentAmmoChanged(currentAmmo = maxAmmo);
         isReloading = false;
     }
 }
