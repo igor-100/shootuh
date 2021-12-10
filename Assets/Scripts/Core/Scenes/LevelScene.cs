@@ -4,6 +4,7 @@ public class LevelScene : MonoBehaviour
 {
     private IGameCamera GameCam;
     private IWarrior Warrior;
+    private IPlayerInput PlayerInput;
     private IGameOverScreen GameOverScreen;
     private IPauseScreen PauseScreen;
     private IHUD HUD;
@@ -13,7 +14,7 @@ public class LevelScene : MonoBehaviour
         GameCam = CompositionRoot.GetGameCamera();
         Warrior = CompositionRoot.GetWarrior();
 
-        var playerInput = CompositionRoot.GetPlayerInput();
+        PlayerInput = CompositionRoot.GetPlayerInput();
         var enemySpawner = CompositionRoot.GetEnemySpawner();
         var environment = CompositionRoot.GetEnvironment();
         var uiRoot = CompositionRoot.GetUIRoot();
@@ -36,9 +37,8 @@ public class LevelScene : MonoBehaviour
 
     private void OnPlayerDied()
     {
+        PlayerInput.Disable();
         GameOverScreen.Show();
         HUD.Hide();
     }
-
-    // OnGamePaused() from InputManager
 }

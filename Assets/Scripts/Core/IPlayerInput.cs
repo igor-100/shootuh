@@ -10,4 +10,7 @@ public interface IPlayerInput
     event Action Escape;
     event Action<Vector3> MousePos;
     event Action<Vector2> Move;
+
+    void Disable();
+    void Enable();
 }

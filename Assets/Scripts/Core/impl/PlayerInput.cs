@@ -25,6 +25,22 @@ public class PlayerInput : MonoBehaviour, IPlayerInput
         ListenToMove();
     }
 
+    public void Enable()
+    {
+        if (!gameObject.activeSelf)
+        {
+            gameObject.SetActive(true);
+        }
+    }
+
+    public void Disable()
+    {
+        if (gameObject.activeSelf)
+        {
+            gameObject.SetActive(false);
+        }
+    }
+
     private void ListenToFire()
     {
         if (Input.GetButton(FireButton))
