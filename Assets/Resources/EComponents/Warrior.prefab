@@ -186,7 +186,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 40793167904974931}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 40d2ebd9e2eee2844bc2b9142ba6b295, type: 3}
+  m_Script: {fileID: 11500000, guid: 3f722599295147a41a8939ad2a232012, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   selectedWeaponId: 0
@@ -381,9 +381,9 @@ GameObject:
   m_Component:
   - component: {fileID: 327428009586333982}
   - component: {fileID: 246572603549638899}
-  - component: {fileID: 1003636255713799786}
+  - component: {fileID: 7237063289281806853}
   m_Layer: 6
-  m_Name: AssaultRifle Red
+  m_Name: Rifle_Weapon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -512,7 +512,7 @@ SkinnedMeshRenderer:
     m_Center: {x: -34.27955, y: -49.079704, z: 120.48372}
     m_Extent: {x: 95.48148, y: 94.6697, z: 10.629513}
   m_DirtyAABB: 0
---- !u!114 &1003636255713799786
+--- !u!114 &7237063289281806853
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -521,15 +521,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 3490705168921979390}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d29e238ef1efeeb479144f9625d3f78c, type: 3}
+  m_Script: {fileID: 11500000, guid: 83fd3a189c9f538488dd09c82155f191, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxAmmo: 20
-  projectileSpeed: 35
-  fireRate: 4
-  reloadTime: 1
-  pfProjectile: {fileID: 1989884415989383802, guid: 64c512e258221e34d9345fd06e53dd08, type: 3}
-  modeName: Rifle
 --- !u!1 &6723324211603660448
 GameObject:
   m_ObjectHideFlags: 0
@@ -542,7 +536,7 @@ GameObject:
   - component: {fileID: 6723324211608933294}
   - component: {fileID: 7796825171179380973}
   m_Layer: 6
-  m_Name: AssaultRifle Blue
+  m_Name: Standard_Weapon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -680,15 +674,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 6723324211603660448}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d29e238ef1efeeb479144f9625d3f78c, type: 3}
+  m_Script: {fileID: 11500000, guid: 34456c40fd84f014eb9a6c6785f51ff1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxAmmo: 30
-  projectileSpeed: 35
-  fireRate: 5
-  reloadTime: 1
-  pfProjectile: {fileID: 1989884415989383802, guid: e913f2475795ae64db8bcafdabb1096d, type: 3}
-  modeName: Standard
 --- !u!1 &6723324211603660450
 GameObject:
   m_ObjectHideFlags: 0
@@ -2429,7 +2417,6 @@ GameObject:
   - component: {fileID: 7072444061785431081}
   - component: {fileID: 6211073685250999662}
   - component: {fileID: 7072444061785431082}
-  - component: {fileID: 1502391624}
   m_Layer: 6
   m_Name: Warrior
   m_TagString: Untagged
@@ -2517,18 +2504,6 @@ MonoBehaviour:
   health:
     BaseValue: 100
   weaponHolder: {fileID: 5110899697263658488}
---- !u!114 &1502391624
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6723324211603660526}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 70f85d2711aa5594d8596b08ddad1405, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
   moveSpeed: 5
 --- !u!1 &6723324211603660528
 GameObject:
@@ -3279,9 +3254,9 @@ GameObject:
   m_Component:
   - component: {fileID: 8721636718846158157}
   - component: {fileID: 8857196247878831879}
-  - component: {fileID: 2059678459577978328}
+  - component: {fileID: 5604965060622726352}
   m_Layer: 6
-  m_Name: AssaultRifle Purple
+  m_Name: Rapid_Weapon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3410,7 +3385,7 @@ SkinnedMeshRenderer:
     m_Center: {x: -34.27955, y: -49.079704, z: 120.48372}
     m_Extent: {x: 95.48148, y: 94.6697, z: 10.629513}
   m_DirtyAABB: 0
---- !u!114 &2059678459577978328
+--- !u!114 &5604965060622726352
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -3419,12 +3394,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 8475551870916064544}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d29e238ef1efeeb479144f9625d3f78c, type: 3}
+  m_Script: {fileID: 11500000, guid: d50396ff0475e6e49be48b8ce2a24547, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxAmmo: 40
-  projectileSpeed: 35
-  fireRate: 10
-  reloadTime: 1
-  pfProjectile: {fileID: 1989884415989383802, guid: b4d25e8203935164f9b55babf7a067cc, type: 3}
-  modeName: Rapid

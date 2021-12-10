@@ -2,32 +2,33 @@ using System;
 using System.Collections;
 using UnityEngine;
 
-public class Weapon : MonoBehaviour
+public abstract class Weapon : MonoBehaviour, IWeapon
 {
-    [SerializeField] private int maxAmmo = 20;
-    [SerializeField] private float projectileSpeed = 30f;
-    [SerializeField] private float fireRate = 15f;
-    [SerializeField] private float reloadTime = 1f;
-    [SerializeField] private Projectile pfProjectile;
-    [SerializeField] private string modeName;
-
     public event Action<int> CurrentAmmoChanged;
 
     private IPlayerInput PlayerInput;
+    private IResourceManager ResourceManager;
+
+    private WeaponProperties weaponProperties;
 
     private float nextTimeToFire = 0f;
     private int currentAmmo;
     private bool isReloading;
 
+    public Color Color { get => weaponProperties.Color; }
     public int CurrentAmmo { get => currentAmmo; }
-    public Projectile PfProjectile { get => pfProjectile; }
-    public string ModeName { get => modeName; }
+    public string ModeName { get => weaponProperties.ModeName; }
+
+    protected abstract WeaponProperties InitProperties();
 
     private void Awake()
     {
+        ResourceManager = CompositionRoot.GetResourceManager();
         PlayerInput = CompositionRoot.GetPlayerInput();
 
-        currentAmmo = maxAmmo;
+        weaponProperties = InitProperties();
+
+        currentAmmo = weaponProperties.MaxAmmo;
     }
 
     private void OnEnable()
@@ -46,7 +47,7 @@ public class Weapon : MonoBehaviour
     {
         if (!isReloading && currentAmmo != 0 && Time.time >= nextTimeToFire)
         {
-            nextTimeToFire = Time.time + 1f / fireRate;
+            nextTimeToFire = Time.time + 1f / weaponProperties.FireRate;
             ShootProjectile();
             CurrentAmmoChanged(--currentAmmo);
         }
@@ -59,8 +60,10 @@ public class Weapon : MonoBehaviour
 
     private void InstantiateProjectile()
     {
-        var projectileObj = Instantiate(pfProjectile, transform.parent.position, Quaternion.identity);
-        projectileObj.GetComponent<Rigidbody>().velocity = transform.parent.forward * projectileSpeed;
+        var projectileObj = ResourceManager.GetPooledObject<IProjectile, EComponents>(weaponProperties.ProjectileType);
+        projectileObj.transform.position = transform.parent.position;
+        projectileObj.SetActive(true);
+        projectileObj.GetComponent<Rigidbody>().velocity = transform.parent.forward * weaponProperties.ProjectileSpeed;
     }
 
     private void OnReload()
@@ -71,8 +74,8 @@ public class Weapon : MonoBehaviour
     private IEnumerator WaitForReloading()
     {
         isReloading = true;
-        yield return new WaitForSeconds(reloadTime);
-        CurrentAmmoChanged(currentAmmo = maxAmmo);
+        yield return new WaitForSeconds(weaponProperties.ReloadTime);
+        CurrentAmmoChanged(currentAmmo = weaponProperties.MaxAmmo);
         isReloading = false;
     }
 }

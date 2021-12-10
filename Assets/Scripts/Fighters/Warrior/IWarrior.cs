@@ -1,8 +1,7 @@
-using System;
 using UnityEngine;
 
-public interface IWarrior : IAlive, IMovable, IAttack
+public interface IWarrior : IAlive, IMovable
 {
-    WeaponHolder WeaponHolder { get; }
-    void Hit(float damage);
+    IWeaponHolder WeaponHolder { get; }
+    void SetCamera(Camera cam);
 }

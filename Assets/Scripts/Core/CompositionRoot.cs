@@ -13,6 +13,7 @@ public class CompositionRoot : MonoBehaviour
     private static ISceneLoader SceneLoader;
     //private static EventSystem EventSystem;
     private static IResourceManager ResourceManager;
+    private static IConfiguration Configuration;
 
     private static IHUD HUD;
     private static IGameOverScreen GameOverScreen;
@@ -28,6 +29,7 @@ public class CompositionRoot : MonoBehaviour
         PlayerInput = null;
         GameCamera = null;
         ViewFactory = null;
+        Configuration = null;
         //EventSystem = null;
 
         HUD = null;
@@ -102,6 +104,16 @@ public class CompositionRoot : MonoBehaviour
         }
 
         return SceneLoader;
+    }
+
+    public static IConfiguration GetConfiguration()
+    {
+        if (Configuration == null)
+        {
+            Configuration = new Configuration();
+        }
+
+        return Configuration;
     }
 
     public static IUIRoot GetUIRoot()

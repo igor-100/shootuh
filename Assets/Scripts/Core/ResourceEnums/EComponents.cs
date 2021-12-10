@@ -6,5 +6,8 @@ public enum EComponents
     Enemy_Spawner,
     Environment,
     SceneLoader,
-    UIRoot
+    UIRoot,
+    Projectile_Blue,
+    Projectile_Red,
+    Projectile_Purple
 }

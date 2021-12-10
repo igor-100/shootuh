@@ -28,7 +28,7 @@ public class HUD : MonoBehaviour, IHUD
         UpdateAmmoText(currentWeapon.CurrentAmmo);
     }
 
-    private void OnSelectedWeaponChange(Weapon currentWeapon)
+    private void OnSelectedWeaponChange(IWeapon currentWeapon)
     {
         currentWeapon.CurrentAmmoChanged += OnAmmoChange;
         UpdateAmmoText(currentWeapon.CurrentAmmo);
@@ -51,14 +51,13 @@ public class HUD : MonoBehaviour, IHUD
         View.SetAmmoText(currentAmmoText);
     }
 
-    private void UpdateColor(Weapon weapon)
+    private void UpdateColor(IWeapon weapon)
     {
-        // Add color configuration for projectile
-        var color = weapon.PfProjectile.transform.Find(TrailComponent).GetComponent<TrailRenderer>().startColor;
+        var color = weapon.Color;
         View.SetAmmoAndWeaponTextColor(color);
     }
 
-    private void UpdateWeaponText(Weapon weapon)
+    private void UpdateWeaponText(IWeapon weapon)
     {
         View.SetWeaponText(weapon.ModeName);
     }

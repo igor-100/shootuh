@@ -31,6 +31,7 @@ public class LevelScene : MonoBehaviour
     private void Start()
     {
         GameCam.Target = Warrior.Transform;
+        Warrior.SetCamera(GameCam.CameraComponent);
     }
 
     private void OnPlayerDied()

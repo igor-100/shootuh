@@ -112,13 +112,18 @@ public class Enemy : MonoBehaviour, IEnemy
         var projectile = collision.gameObject.GetComponent<Projectile>();
         if (projectile)
         {
-            currentHealth -= projectile.Damage;
-            HealthPercentChanged((float)currentHealth / health.BaseValue);
-            if (currentHealth <= 0)
-            {
-                currentHealth = 0;
-                StartCoroutine(Die());
-            }
+            Hit(projectile.Damage);
+        }
+    }
+
+    public void Hit(float damage)
+    {
+        currentHealth -= damage;
+        HealthPercentChanged((float)currentHealth / health.BaseValue);
+        if (currentHealth <= 0)
+        {
+            currentHealth = 0;
+            StartCoroutine(Die());
         }
     }
 

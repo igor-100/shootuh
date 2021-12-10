@@ -13,8 +13,9 @@ public class GameCamera : MonoBehaviour, IGameCamera
     private Vector3 cameraAngle;
 
     public Transform Target { get; set; }
+    public Camera CameraComponent => GetComponent<Camera>();
 
-    private void Start()
+    private void Awake()
     {
         transform.rotation = Quaternion.Euler(cameraAngle);
     }

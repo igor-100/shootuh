@@ -1,17 +1,17 @@
 using System;
 using UnityEngine;
 
-public class WeaponHolder : MonoBehaviour
+public class WeaponHolder : MonoBehaviour, IWeaponHolder
 {
     [SerializeField] private int selectedWeaponId = 0;
 
-    public event Action<Weapon> SelectedWeaponChanged = weapon => { };
+    public event Action<IWeapon> SelectedWeaponChanged = weapon => { };
 
     private IPlayerInput PlayerInput;
 
-    private Weapon currentWeapon;
+    private IWeapon currentWeapon;
 
-    public Weapon CurrentWeapon { get => currentWeapon; }
+    public IWeapon CurrentWeapon { get => currentWeapon; }
 
     private void Awake()
     {
@@ -45,7 +45,7 @@ public class WeaponHolder : MonoBehaviour
             if (i == selectedWeaponId)
             {
                 weaponTransform.gameObject.SetActive(true);
-                currentWeapon = weaponTransform.GetComponent<Weapon>();
+                currentWeapon = weaponTransform.GetComponent<IWeapon>();
             }
             else
             {

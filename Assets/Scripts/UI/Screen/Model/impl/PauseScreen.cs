@@ -11,7 +11,10 @@ public class PauseScreen : MonoBehaviour, IPauseScreen
     private void Awake()
     {
         SceneLoader = CompositionRoot.GetSceneLoader();
+        var playerInput = CompositionRoot.GetPlayerInput();
         var viewFactory = CompositionRoot.GetViewFactory();
+
+        playerInput.Escape += OnEscape;
 
         View = viewFactory.CreatePauseScreen();
 
@@ -20,19 +23,15 @@ public class PauseScreen : MonoBehaviour, IPauseScreen
         View.QuitClicked += OnQuitClicked;
     }
 
-    private void Update()
+    private void OnEscape()
     {
-        // TODO: InputManager
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (gameIsPaused)
         {
-            if (gameIsPaused)
-            {
-                Resume();
-            }
-            else
-            {
-                Pause();
-            }
+            Resume();
+        }
+        else
+        {
+            Pause();
         }
     }
 

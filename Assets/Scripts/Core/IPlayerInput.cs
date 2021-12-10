@@ -7,7 +7,7 @@ public interface IPlayerInput
     event Action Reload;
     event Action<float> MouseWheelScrolled;
     event Action<int> KeyAlphaPressed;
-    event Action Pause;
-    event Action<Vector2> Rotate;
+    event Action Escape;
+    event Action<Vector3> MousePos;
     event Action<Vector2> Move;
 }

@@ -10,8 +10,8 @@ public class PlayerInput : MonoBehaviour, IPlayerInput
     public event Action Reload;
     public event Action<float> MouseWheelScrolled;
     public event Action<int> KeyAlphaPressed;
-    public event Action Pause;
-    public event Action<Vector2> Rotate;
+    public event Action Escape;
+    public event Action<Vector3> MousePos;
     public event Action<Vector2> Move;
 
     private void Update()
@@ -20,8 +20,8 @@ public class PlayerInput : MonoBehaviour, IPlayerInput
         ListenToReload();
         ListenToMouseScrollWheel();
         ListenToKeyAlpha();
-        ListenToPause();
-        ListenToRotate();
+        ListenToEscape();
+        ListenToMousePos();
         ListenToMove();
     }
 
@@ -66,18 +66,25 @@ public class PlayerInput : MonoBehaviour, IPlayerInput
         }
     }
 
-    private void ListenToPause()
+    private void ListenToEscape()
     {
-        //throw new NotImplementedException();
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Escape();
+        }
     }
 
-    private void ListenToRotate()
+    private void ListenToMousePos()
     {
-        //throw new NotImplementedException();
+        MousePos(Input.mousePosition);
     }
 
     private void ListenToMove()
     {
-        //throw new NotImplementedException();
+        var moveVector = Vector2.zero;
+        moveVector.x = Input.GetAxisRaw("Horizontal");
+        moveVector.y = Input.GetAxisRaw("Vertical");
+
+        Move(moveVector.normalized);
     }
 }
