@@ -7,9 +7,7 @@ public class HealthBarView : MonoBehaviour, IHealthBarView
     [SerializeField] private Transform barTransform;
     [SerializeField] private Transform containerTransform;
 
-    public bool IsShown { get => isShown; }
-
-    private bool isShown;
+    public bool IsShown { get; private set; }
 
     private void Update()
     {
@@ -25,12 +23,12 @@ public class HealthBarView : MonoBehaviour, IHealthBarView
 
     public void Show()
     {
-        isShown = true;
+        IsShown = true;
         containerTransform.gameObject.SetActive(true);
     }
     public void Hide()
     {
-        isShown = false;
+        IsShown = false;
         containerTransform.gameObject.SetActive(false);
     }
 }
