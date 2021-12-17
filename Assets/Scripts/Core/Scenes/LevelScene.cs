@@ -26,6 +26,7 @@ public class LevelScene : MonoBehaviour
         PauseScreen = CompositionRoot.GetPauseScreen();
         PauseScreen.Hide();
 
+        Warrior.StartedDying += OnPlayerDying;
         Warrior.Died += OnPlayerDied;
     }
 
@@ -35,9 +36,13 @@ public class LevelScene : MonoBehaviour
         Warrior.SetCamera(GameCam.CameraComponent);
     }
 
-    private void OnPlayerDied()
+    private void OnPlayerDying()
     {
         PlayerInput.Disable();
+    }
+
+    private void OnPlayerDied()
+    {
         GameOverScreen.Show();
         HUD.Hide();
     }

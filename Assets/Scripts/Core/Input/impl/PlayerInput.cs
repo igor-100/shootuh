@@ -6,13 +6,13 @@ public class PlayerInput : MonoBehaviour, IPlayerInput
     private const string FireButton = "Fire1";
     private const string MouseScrollWheel = "Mouse ScrollWheel";
 
-    public event Action Fire;
-    public event Action Reload;
-    public event Action<float> MouseWheelScrolled;
-    public event Action<int> KeyAlphaPressed;
-    public event Action Escape;
-    public event Action<Vector3> MousePos;
-    public event Action<Vector2> Move;
+    public event Action Fire = () => { };
+    public event Action Reload = () => { };
+    public event Action<float> MouseWheelScrolled = axisValue => { };
+    public event Action<int> KeyAlphaPressed = keyValue => { };
+    public event Action Escape = () => { };
+    public event Action<Vector3> MousePositionUpdated = mousePos => { };
+    public event Action<Vector2> Move = moveVector => { };
 
     private void Update()
     {
@@ -92,7 +92,7 @@ public class PlayerInput : MonoBehaviour, IPlayerInput
 
     private void ListenToMousePos()
     {
-        MousePos(Input.mousePosition);
+        MousePositionUpdated(Input.mousePosition);
     }
 
     private void ListenToMove()

@@ -32,11 +32,13 @@ public class EnemySpawner : MonoBehaviour, IEnemySpawner
     private IEnumerator SpawnEnemy()
     {
         yield return new WaitForSeconds(Random.Range(minSpawnDelay, maxSpawnDelay));
-        Vector3 randomSpot = new Vector3(Random.Range(maxSpawnXDistance, -maxSpawnXDistance), 0, Random.Range(maxSpawnZDistance, -maxSpawnZDistance));
 
         var enemyObj = resourceManager.GetPooledObject<IEnemy, EComponents>(EComponents.Enemy_HM);
+
         var enemy = enemyObj.GetComponent<IEnemy>();
         enemy.TargetTransform = warrior.Transform;
+
+        Vector3 randomSpot = new Vector3(Random.Range(maxSpawnXDistance, -maxSpawnXDistance), 0, Random.Range(maxSpawnZDistance, -maxSpawnZDistance));
         enemyObj.transform.position = randomSpot;
         enemyObj.transform.rotation = transform.rotation;
         enemyObj.SetActive(true);

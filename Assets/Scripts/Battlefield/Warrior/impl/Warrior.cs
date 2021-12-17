@@ -8,7 +8,8 @@ public class Warrior : MonoBehaviour, IWarrior
     private const float GameOverDelay = 2f;
 
     public event Action Died = () => { };
-    public event Action<float> HealthPercentChanged;
+    public event Action StartedDying = () => { };
+    public event Action<float> HealthPercentChanged = percent => { };
 
     [SerializeField] private CharacterStat health;
     [SerializeField] private WeaponHolder weaponHolder;
@@ -33,7 +34,7 @@ public class Warrior : MonoBehaviour, IWarrior
         var playerInput = CompositionRoot.GetPlayerInput();
 
         playerInput.Move += OnMove;
-        playerInput.MousePos += OnPoint;
+        playerInput.MousePositionUpdated += OnPoint;
 
         rb = GetComponent<Rigidbody>();
         animator = GetComponent<Animator>();
@@ -105,12 +106,13 @@ public class Warrior : MonoBehaviour, IWarrior
         HealthPercentChanged((float)currentHealth / health.BaseValue);
         if (currentHealth <= 0)
         {
-            Die();    
+            StartDying();    
         }
     }
 
-    private void Die()
+    private void StartDying()
     {
+        StartedDying();
         currentHealth = 0;
         gameObject.SetActive(false);
         Invoke("FinallyDie", GameOverDelay);

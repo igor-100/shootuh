@@ -55,6 +55,37 @@ public class ResourceManager : IResourceManager
         return tmp;
     }
 
+    // was created for testing purposes and should be implemented in a different way
+    public GameObject GetPooledObject<T, E>(E item, int maximumSize) where E : Enum
+    {
+        string type = item.ToString();
+        if (!objectPools.ContainsKey(type))
+        {
+            objectPools.Add(type, new List<GameObject>());
+        }
+
+        objectPools.TryGetValue(type, out List<GameObject> pooledObjects);
+
+        foreach (var obj in pooledObjects)
+        {
+            if (!obj.activeSelf)
+            {
+                return obj;
+            }
+        }
+
+        if (pooledObjects.Count <= maximumSize)
+        {
+            var tmp = CreatePrefabInstance(item);
+            pooledObjects.Add(tmp);
+            return tmp;
+        }
+        else
+        {
+            return null;
+        }
+    }
+
     public void ResetPools()
     {
         objectPools = new Dictionary<string, List<GameObject>>();
