@@ -11,11 +11,7 @@ public class Warrior : MonoBehaviour, IWarrior
     public event Action StartedDying = () => { };
     public event Action<float> HealthPercentChanged = percent => { };
 
-    [SerializeField] private CharacterStat health;
     [SerializeField] private WeaponHolder weaponHolder;
-    [SerializeField]
-    [Range(0, 10)]
-    private float moveSpeed = 5f;
 
     private Rigidbody rb;
     private Animator animator;
@@ -24,7 +20,10 @@ public class Warrior : MonoBehaviour, IWarrior
     private Vector3 movement;
     private Vector3 mousePos;
     private bool isMoving;
+
+    private WarriorProperties warriorProperties;
     private float currentHealth;
+    private float moveSpeed;
 
     public Transform Transform => transform;
     public IWeaponHolder WeaponHolder => weaponHolder;
@@ -32,6 +31,7 @@ public class Warrior : MonoBehaviour, IWarrior
     private void Awake()
     {
         var playerInput = CompositionRoot.GetPlayerInput();
+        warriorProperties = CompositionRoot.GetConfiguration().GetWarriorProperties();
 
         playerInput.Move += OnMove;
         playerInput.MousePositionUpdated += OnPoint;
@@ -39,7 +39,8 @@ public class Warrior : MonoBehaviour, IWarrior
         rb = GetComponent<Rigidbody>();
         animator = GetComponent<Animator>();
 
-        currentHealth = health.BaseValue;
+        currentHealth = warriorProperties.HealthStat.BaseValue;
+        moveSpeed = warriorProperties.MoveSpeedStat.BaseValue;
     }
 
     void Update()
@@ -103,7 +104,7 @@ public class Warrior : MonoBehaviour, IWarrior
     public void Hit(float damage)
     {
         currentHealth -= damage;
-        HealthPercentChanged((float)currentHealth / health.BaseValue);
+        HealthPercentChanged((float)currentHealth / warriorProperties.HealthStat.BaseValue);
         if (currentHealth <= 0)
         {
             StartDying();    

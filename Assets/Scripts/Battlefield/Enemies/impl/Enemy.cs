@@ -11,25 +11,20 @@ public class Enemy : MonoBehaviour, IEnemy
     public event Action AttackCompleted = () => { };
     public event Action<float> HealthPercentChanged = percent => { };
 
-    [SerializeField] private CharacterStat health;
-    [SerializeField] private float damage = 20f;
-    [SerializeField] private float moveSpeed = 5f;
-    [SerializeField] private float hitHeight = 0.5f;
-    [SerializeField] private float deathTime = 2f;
-    [SerializeField] private float attackTime = 1f;
-    [SerializeField] private float attackRange = 5f;
-
+    private EnemyProperties enemyProperties;
     private float currentHealth;
+    private float currentDamage;
+    private float currentMoveSpeed;
 
     private Animator animator;
     private Rigidbody rb;
     private BoxCollider boxCollider;
     private Transform targetTransform;
 
-    public float Damage { get => damage; }
+    public float Damage { get => currentDamage; }
     public Transform TargetTransform { get => targetTransform; set => targetTransform = value; }
     public Transform Transform { get => transform; }
-    public float AttackRange { get => attackRange; }
+    public float AttackRange { get => enemyProperties.AttackRange; }
     public GameObject EnemyGameObject { get => gameObject; }
 
     public StateMachine StateMachine { get; private set; }
@@ -41,6 +36,8 @@ public class Enemy : MonoBehaviour, IEnemy
 
     void Awake()
     {
+        enemyProperties = CompositionRoot.GetConfiguration().GetEnemyProperties();
+
         rb = GetComponent<Rigidbody>();
         animator = GetComponent<Animator>();
         boxCollider = GetComponent<BoxCollider>();
@@ -52,6 +49,8 @@ public class Enemy : MonoBehaviour, IEnemy
         WalkingState = new WalkingState(this, StateMachine);
         IdleState = new IdleState(this, StateMachine);
         DyingState = new DyingState(this, StateMachine);
+
+        
     }
 
     private void OnEnable()
@@ -59,7 +58,9 @@ public class Enemy : MonoBehaviour, IEnemy
         StateMachine.Initialize(WalkingState);
 
         boxCollider.enabled = true;
-        currentHealth = health.BaseValue;
+        currentHealth = enemyProperties.HealthStat.BaseValue;
+        currentDamage = enemyProperties.DamageStat.BaseValue;
+        currentMoveSpeed = enemyProperties.MoveSpeedStat.BaseValue;
     }
 
     void FixedUpdate()
@@ -74,7 +75,7 @@ public class Enemy : MonoBehaviour, IEnemy
 
     private IEnumerator WaitingForNextAttack()
     {
-        yield return new WaitForSeconds(attackTime);
+        yield return new WaitForSeconds(enemyProperties.AttackTime);
         AttackCompleted();
     }
 
@@ -82,13 +83,13 @@ public class Enemy : MonoBehaviour, IEnemy
     public void Attack()
     {
         RaycastHit objectHit;
-        if (Physics.Raycast(new Vector3(transform.position.x, transform.position.y + hitHeight, transform.position.z),
-            transform.forward, out objectHit, attackRange, LayerMask.GetMask(PlayerMaskName)))
+        if (Physics.Raycast(new Vector3(transform.position.x, transform.position.y + enemyProperties.HitHeight, transform.position.z),
+            transform.forward, out objectHit, enemyProperties.AttackRange, LayerMask.GetMask(PlayerMaskName)))
         {
             var warrior = objectHit.transform.GetComponent<IWarrior>();
             if (warrior != null)
             {
-                warrior.Hit(damage);
+                warrior.Hit(currentDamage);
             }
         }
     }
@@ -101,7 +102,7 @@ public class Enemy : MonoBehaviour, IEnemy
 
     public void Walk()
     {
-        rb.MovePosition(rb.position + moveSpeed * Time.fixedDeltaTime * transform.forward);
+        rb.MovePosition(rb.position + currentMoveSpeed * Time.fixedDeltaTime * transform.forward);
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -116,7 +117,7 @@ public class Enemy : MonoBehaviour, IEnemy
     public void Hit(float damage)
     {
         currentHealth -= damage;
-        HealthPercentChanged((float)currentHealth / health.BaseValue);
+        HealthPercentChanged((float)currentHealth / enemyProperties.HealthStat.BaseValue);
         if (currentHealth <= 0)
         {
             currentHealth = 0;
@@ -134,7 +135,7 @@ public class Enemy : MonoBehaviour, IEnemy
     {
         boxCollider.enabled = false;
         animator.SetTrigger(DieTrigger);
-        yield return new WaitForSeconds(deathTime);
+        yield return new WaitForSeconds(enemyProperties.DeathTime);
 
         gameObject.SetActive(false);
         Died();

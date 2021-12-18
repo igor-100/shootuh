@@ -5,6 +5,8 @@ public class Configuration : IConfiguration
     private readonly WeaponProperties standardWeaponProperties;
     private readonly WeaponProperties rifleWeaponProperties;
     private readonly WeaponProperties rapidWeaponProperties;
+    private readonly WarriorProperties warriorProperties;
+    private readonly EnemyProperties enemyProperties;
 
     public Configuration()
     {
@@ -40,6 +42,25 @@ public class Configuration : IConfiguration
             ModeName = "Rapid",
             Color = new Color32(211, 31, 122, 255)
         };
+
+        warriorProperties = new WarriorProperties()
+        {
+            HealthStat = new CharacterStat(100f),
+            MoveSpeedStat = new CharacterStat(5f)
+        };
+
+        enemyProperties = new EnemyProperties()
+        {
+            HealthStat = new CharacterStat(100f),
+            DamageStat = new CharacterStat(20f),
+            MoveSpeedStat = new CharacterStat(5f),
+
+            HitHeight = 0.5f,
+            DeathTime = 2f,
+            AttackTime = 1f,
+            AttackRange = 5f
+        };
+        
     }
 
     public WeaponProperties GetStandardWeaponProperties()
@@ -55,5 +76,15 @@ public class Configuration : IConfiguration
     public WeaponProperties GetRapidWeaponProperties()
     {
         return rapidWeaponProperties;
+    }
+
+    public WarriorProperties GetWarriorProperties()
+    {
+        return warriorProperties;
+    }
+
+    public EnemyProperties GetEnemyProperties()
+    {
+        return enemyProperties;
     }
 }
