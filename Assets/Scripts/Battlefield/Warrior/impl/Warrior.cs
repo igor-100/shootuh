@@ -4,7 +4,6 @@ using UnityEngine;
 public class Warrior : MonoBehaviour, IWarrior
 {
     private const string IsRunning = "isRunning";
-    private const string FloorMaskName = "Floor";
     private const float GameOverDelay = 2f;
 
     public event Action Died = () => { };
@@ -15,10 +14,8 @@ public class Warrior : MonoBehaviour, IWarrior
 
     private Rigidbody rb;
     private Animator animator;
-    private Camera cam;
 
     private Vector3 movement;
-    private Vector3 mousePos;
     private bool isMoving;
 
     private WarriorProperties warriorProperties;
@@ -34,7 +31,6 @@ public class Warrior : MonoBehaviour, IWarrior
         warriorProperties = CompositionRoot.GetConfiguration().GetWarriorProperties();
 
         playerInput.Move += OnMove;
-        playerInput.MousePositionUpdated += OnPoint;
 
         rb = GetComponent<Rigidbody>();
         animator = GetComponent<Animator>();
@@ -52,7 +48,6 @@ public class Warrior : MonoBehaviour, IWarrior
     private void FixedUpdate()
     {
         Move();
-        Rotate();
     }
 
     private void OnMove(Vector2 moveVector)
@@ -84,18 +79,9 @@ public class Warrior : MonoBehaviour, IWarrior
         }
     }
 
-    private void OnPoint(Vector3 mousePos)
+    public void Rotate(Vector3 rotationPoint)
     {
-        RaycastHit objectHit;
-        if (Physics.Raycast(cam.ScreenPointToRay(mousePos), out objectHit, LayerMask.GetMask(FloorMaskName)))
-        {
-            this.mousePos = objectHit.point;
-        }
-    }
-
-    private void Rotate()
-    {
-        var lookDir = mousePos - rb.position;
+        var lookDir = rotationPoint - rb.position;
         float angle = Mathf.Atan2(lookDir.x, lookDir.z) * Mathf.Rad2Deg;
 
         rb.rotation = Quaternion.Euler(0, angle, 0);
@@ -122,10 +108,5 @@ public class Warrior : MonoBehaviour, IWarrior
     private void FinallyDie()
     {
         Died();
-    }
-
-    public void SetCamera(Camera cam)
-    {
-        this.cam = cam;
     }
 }

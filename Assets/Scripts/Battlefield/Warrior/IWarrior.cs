@@ -7,5 +7,5 @@ public interface IWarrior : IAlive, IMovable
 
     event Action StartedDying;
 
-    void SetCamera(Camera cam);
+    void Rotate(Vector3 rotationPoint);
 }
