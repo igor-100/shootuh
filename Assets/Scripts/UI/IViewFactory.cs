@@ -3,5 +3,6 @@
     IPauseScreenView CreatePauseScreen();
     IGameOverScreenView CreateGameOverScreen();
     IMainMenuScreenView CreateMainMenuScreen();
-    IHUDView CreateHUD();
+    IHUDWeaponView CreateHUDWeapon();
+    IHUDLevelView CreateHUDLevel();
 }

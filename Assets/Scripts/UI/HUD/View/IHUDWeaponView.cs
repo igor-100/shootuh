@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public interface IHUDView : IView
+public interface IHUDWeaponView : IView
 {
     void SetAmmoText(string ammoText);
     void SetWeaponText(string weaponText);

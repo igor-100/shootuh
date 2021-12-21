@@ -1,18 +1,16 @@
 using UnityEngine;
 
-public class HUD : MonoBehaviour, IHUD
+public class HUDWeapon : MonoBehaviour, IHUDWeapon
 {
-    private const string TrailComponent = "Trail";
-
     private IWarrior Warrior;
 
-    private IHUDView View;
+    private IHUDWeaponView View;
 
     private void Awake()
     {
         Warrior = CompositionRoot.GetWarrior();
         var viewFactory = CompositionRoot.GetViewFactory();
-        View = viewFactory.CreateHUD();
+        View = viewFactory.CreateHUDWeapon();
     }
 
     private void Start()

@@ -12,10 +12,12 @@ public class CompositionRoot : MonoBehaviour
     private static IViewFactory ViewFactory;
     private static ISceneLoader SceneLoader;
     //private static EventSystem EventSystem;
+    private static ILevelSystem LevelSystem;
     private static IResourceManager ResourceManager;
     private static IConfiguration Configuration;
 
-    private static IHUD HUD;
+    private static IHUDWeapon HUDWeapon;
+    private static IHUDLevel HUDLevel;
     private static IGameOverScreen GameOverScreen;
     private static IMainMenuScreen MainMenuScreen;
     private static IPauseScreen PauseScreen;
@@ -32,7 +34,8 @@ public class CompositionRoot : MonoBehaviour
         Configuration = null;
         //EventSystem = null;
 
-        HUD = null;
+        HUDWeapon = null;
+        HUDLevel = null;
         GameOverScreen = null;
         MainMenuScreen = null;
         PauseScreen = null;
@@ -116,6 +119,16 @@ public class CompositionRoot : MonoBehaviour
         return Configuration;
     }
 
+    public static ILevelSystem GetLevelSystem()
+    {
+        if (LevelSystem == null)
+        {
+            LevelSystem = new LevelSystem();
+        }
+
+        return LevelSystem;
+    }
+
     public static IUIRoot GetUIRoot()
     {
         if (UIRoot == null)
@@ -173,15 +186,26 @@ public class CompositionRoot : MonoBehaviour
         return MainMenuScreen;
     }
 
-    public static IHUD GetHUD()
+    public static IHUDWeapon GetHUDWeapon()
     {
-        if (HUD == null)
+        if (HUDWeapon == null)
         {
-            var gameObject = new GameObject("HUD");
-            HUD = gameObject.AddComponent<HUD>();
+            var gameObject = new GameObject("HUDWeapon");
+            HUDWeapon = gameObject.AddComponent<HUDWeapon>();
         }
 
-        return HUD;
+        return HUDWeapon;
+    }
+
+    public static IHUDLevel GetHUDLevel()
+    {
+        if (HUDLevel == null)
+        {
+            var gameObject = new GameObject("HUDLevel");
+            HUDLevel = gameObject.AddComponent<HUDLevel>();
+        }
+
+        return HUDLevel;
     }
 
     public static IPlayerInput GetPlayerInput()

@@ -2,7 +2,7 @@ using System;
 using TMPro;
 using UnityEngine;
 
-public class HUDView : BaseView, IHUDView
+public class HUDWeaponView : BaseView, IHUDWeaponView
 {
     [SerializeField] private TextMeshProUGUI ammoTextComponent;
     [SerializeField] private TextMeshProUGUI weaponTextComponent;

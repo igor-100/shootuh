@@ -33,9 +33,17 @@
         return view;
     }
 
-    public IHUDView CreateHUD()
+    public IHUDWeaponView CreateHUDWeapon()
     {
-        var view = ResourceManager.CreatePrefabInstance<IHUDView, EViews>(EViews.HUD);
+        var view = ResourceManager.CreatePrefabInstance<IHUDWeaponView, EViews>(EViews.HUDWeapon);
+        view.SetParent(UIRoot.MainCanvas);
+
+        return view;
+    }
+
+    public IHUDLevelView CreateHUDLevel()
+    {
+        var view = ResourceManager.CreatePrefabInstance<IHUDLevelView, EViews>(EViews.HUDLevel);
         view.SetParent(UIRoot.MainCanvas);
 
         return view;
