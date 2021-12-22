@@ -14,12 +14,15 @@ public class HUDLevel : MonoBehaviour, IHUDLevel
 
     private void Start()
     {
-        LevelSystem.ExperiencePercentageChanged += OnExperiencePercentageChanged;
+        View.SetLevelText(LevelSystem.GetLevel().ToString());
+        View.SetLevelBarPercent(LevelSystem.GetExperiencePercent());
+
+        LevelSystem.ExperiencePercentChanged += OnExperiencePercentChanged;
         LevelSystem.LevelUp += OnLevelUp;
     }
 
-    private void OnExperiencePercentageChanged(float levelPercent)
-{
+    private void OnExperiencePercentChanged(float levelPercent)
+    {
         View.SetLevelBarPercent(levelPercent);
     }
 

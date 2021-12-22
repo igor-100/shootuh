@@ -2,6 +2,8 @@ using System;
 
 public interface ILevelSystem
 {
-    event Action<float> ExperiencePercentageChanged;
+    event Action<float> ExperiencePercentChanged;
     event Action<int> LevelUp;
+    int GetLevel();
+    float GetExperiencePercent();
 }

@@ -61,7 +61,7 @@ public class LevelScene : MonoBehaviour
         PlayerInput.Disable();
     }
 
-    private void OnPlayerDied()
+    private void OnPlayerDied(IAlive warrior)
     {
         GameOverScreen.Show();
         HUDWeapon.Hide();

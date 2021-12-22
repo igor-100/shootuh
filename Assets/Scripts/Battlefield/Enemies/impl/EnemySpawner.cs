@@ -10,6 +10,7 @@ public class EnemySpawner : MonoBehaviour, IEnemySpawner
     [SerializeField] private float maxSpawnZDistance = 75f;
 
     private IResourceManager resourceManager;
+    private IUnitRepository UnitRepository;
 
     private bool spawn = true;
     private IWarrior warrior;
@@ -18,6 +19,7 @@ public class EnemySpawner : MonoBehaviour, IEnemySpawner
     {
         resourceManager = CompositionRoot.GetResourceManager();
         warrior = CompositionRoot.GetWarrior();
+        UnitRepository = CompositionRoot.GetUnitRepository();
     }
 
     // Start is called before the first frame update
@@ -36,17 +38,13 @@ public class EnemySpawner : MonoBehaviour, IEnemySpawner
         var enemyObj = resourceManager.GetPooledObject<IEnemy, EComponents>(EComponents.Enemy_HM);
 
         var enemy = enemyObj.GetComponent<IEnemy>();
+        UnitRepository.AddUnit(enemy);
+
         enemy.TargetTransform = warrior.Transform;
 
         Vector3 randomSpot = new Vector3(Random.Range(maxSpawnXDistance, -maxSpawnXDistance), 0, Random.Range(maxSpawnZDistance, -maxSpawnZDistance));
         enemyObj.transform.position = randomSpot;
         enemyObj.transform.rotation = transform.rotation;
         enemyObj.SetActive(true);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
     }
 }

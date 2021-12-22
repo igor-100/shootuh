@@ -6,7 +6,7 @@ public class Warrior : MonoBehaviour, IWarrior
     private const string IsRunning = "isRunning";
     private const float GameOverDelay = 2f;
 
-    public event Action Died = () => { };
+    public event Action<IAlive> Died = warrior => { };
     public event Action StartedDying = () => { };
     public event Action<float> HealthPercentChanged = percent => { };
 
@@ -107,6 +107,6 @@ public class Warrior : MonoBehaviour, IWarrior
 
     private void FinallyDie()
     {
-        Died();
+        Died(this);
     }
 }

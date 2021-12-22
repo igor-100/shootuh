@@ -7,7 +7,7 @@ public class Enemy : MonoBehaviour, IEnemy
     private const string PlayerMaskName = "Player";
     private const string DieTrigger = "die";
 
-    public event Action Died = () => { };
+    public event Action<IAlive> Died = enemy => { };
     public event Action AttackCompleted = () => { };
     public event Action<float> HealthPercentChanged = percent => { };
 
@@ -133,12 +133,12 @@ public class Enemy : MonoBehaviour, IEnemy
 
     private IEnumerator Dying()
     {
+        Died(this);
         boxCollider.enabled = false;
         animator.SetTrigger(DieTrigger);
         yield return new WaitForSeconds(enemyProperties.DeathTime);
 
         gameObject.SetActive(false);
-        Died();
     }
 
     public void TriggerAnimation(string trigger)

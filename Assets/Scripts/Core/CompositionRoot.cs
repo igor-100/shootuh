@@ -13,6 +13,7 @@ public class CompositionRoot : MonoBehaviour
     private static ISceneLoader SceneLoader;
     //private static EventSystem EventSystem;
     private static ILevelSystem LevelSystem;
+    private static IUnitRepository UnitRepository;
     private static IResourceManager ResourceManager;
     private static IConfiguration Configuration;
 
@@ -32,6 +33,7 @@ public class CompositionRoot : MonoBehaviour
         GameCamera = null;
         ViewFactory = null;
         Configuration = null;
+        UnitRepository = null;
         //EventSystem = null;
 
         HUDWeapon = null;
@@ -127,6 +129,16 @@ public class CompositionRoot : MonoBehaviour
         }
 
         return LevelSystem;
+    }
+
+    public static IUnitRepository GetUnitRepository()
+    {
+        if (UnitRepository == null)
+        {
+            UnitRepository = new UnitRepository();
+        }
+
+        return UnitRepository;
     }
 
     public static IUIRoot GetUIRoot()
