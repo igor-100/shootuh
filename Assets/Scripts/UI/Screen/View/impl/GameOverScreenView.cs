@@ -14,8 +14,11 @@ public class GameOverScreenView : BaseView, IGameOverScreenView
 
     private void Awake()
     {
+        var levelSystem = CompositionRoot.GetLevelSystem();
+
         restartButton.onClick.AddListener(OnRestartClicked);
         quitButton.onClick.AddListener(OnQuitClcked);
+        pointsText.text = "Level: " + levelSystem.GetLevel();
     }
 
     public void OnRestartClicked()

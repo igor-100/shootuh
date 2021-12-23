@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using UnityEngine;
 
 public class UnitRepository : IUnitRepository
 {
@@ -26,6 +25,8 @@ public class UnitRepository : IUnitRepository
 
     private void OnUnitDied(IAlive unit)
     {
+        unit.Died -= OnUnitDied;
+
         var type = unit.GetType().Name;
         unitRepository.TryGetValue(type, out List<IAlive> units);
         units.Remove(unit);

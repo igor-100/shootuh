@@ -34,6 +34,7 @@ public class CompositionRoot : MonoBehaviour
         ViewFactory = null;
         Configuration = null;
         UnitRepository = null;
+        LevelSystem = null;
         //EventSystem = null;
 
         HUDWeapon = null;

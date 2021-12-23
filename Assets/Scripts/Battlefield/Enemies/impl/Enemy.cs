@@ -58,9 +58,9 @@ public class Enemy : MonoBehaviour, IEnemy
         StateMachine.Initialize(WalkingState);
 
         boxCollider.enabled = true;
-        currentHealth = enemyProperties.HealthStat.BaseValue;
-        currentDamage = enemyProperties.DamageStat.BaseValue;
-        currentMoveSpeed = enemyProperties.MoveSpeedStat.BaseValue;
+        currentHealth = enemyProperties.HealthStat.Value;
+        currentDamage = enemyProperties.DamageStat.Value;
+        currentMoveSpeed = enemyProperties.MoveSpeedStat.Value;
     }
 
     void FixedUpdate()
@@ -117,7 +117,7 @@ public class Enemy : MonoBehaviour, IEnemy
     public void Hit(float damage)
     {
         currentHealth -= damage;
-        HealthPercentChanged((float)currentHealth / enemyProperties.HealthStat.BaseValue);
+        HealthPercentChanged((float)currentHealth / enemyProperties.HealthStat.Value);
         if (currentHealth <= 0)
         {
             currentHealth = 0;

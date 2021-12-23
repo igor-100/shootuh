@@ -13,6 +13,13 @@ public class HUDLevelView : BaseView, IHUDLevelView
 
     public void SetLevelBarPercent(float levelPercent)
     {
-        barTransform.localScale = new Vector3(levelPercent, 1);
+        if (1 == levelPercent)
+        {
+            barTransform.localScale = new Vector3(0, 1);
+        }
+        else
+        {
+            barTransform.localScale = new Vector3(levelPercent, 1);
+        }
     }
 }

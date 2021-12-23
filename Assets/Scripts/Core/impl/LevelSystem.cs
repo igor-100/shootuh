@@ -1,7 +1,10 @@
 using System;
+using UnityEngine;
 
 public class LevelSystem : ILevelSystem
 {
+    private const int experienceForEnemy = 10;
+
     private int level;
     private int experience;
     private int experienceToNextLevel;
@@ -25,11 +28,11 @@ public class LevelSystem : ILevelSystem
     {
         if (obj is IEnemy)
         {
-            AddExperience(10);
+            AddExperience(experienceForEnemy);
         }
     }
 
-    public void AddExperience(int amount)
+    private void AddExperience(int amount)
     {
         experience += amount;
         ExperiencePercentChanged((float)experience / experienceToNextLevel);
@@ -41,11 +44,6 @@ public class LevelSystem : ILevelSystem
                 LevelUp(level);
             }
         }
-    }
-
-    public int GetLevelNumber()
-    {
-        return level;
     }
 
     public int GetLevel()

@@ -22,6 +22,8 @@ public class Warrior : MonoBehaviour, IWarrior
     private float currentHealth;
     private float moveSpeed;
 
+    public CharacterStat HealthStat => warriorProperties.HealthStat;
+    public CharacterStat MoveSpeedStat => warriorProperties.MoveSpeedStat;
     public Transform Transform => transform;
     public IWeaponHolder WeaponHolder => weaponHolder;
 
@@ -35,8 +37,8 @@ public class Warrior : MonoBehaviour, IWarrior
         rb = GetComponent<Rigidbody>();
         animator = GetComponent<Animator>();
 
-        currentHealth = warriorProperties.HealthStat.BaseValue;
-        moveSpeed = warriorProperties.MoveSpeedStat.BaseValue;
+        currentHealth = warriorProperties.HealthStat.Value;
+        moveSpeed = warriorProperties.MoveSpeedStat.Value;
     }
 
     void Update()
@@ -90,7 +92,8 @@ public class Warrior : MonoBehaviour, IWarrior
     public void Hit(float damage)
     {
         currentHealth -= damage;
-        HealthPercentChanged((float)currentHealth / warriorProperties.HealthStat.BaseValue);
+        HealthPercentChanged((float)currentHealth / warriorProperties.HealthStat.Value);
+        Debug.Log("Hit. Current health: " + currentHealth + ", healthstat value: " + warriorProperties.HealthStat.Value);
         if (currentHealth <= 0)
         {
             StartDying();    
@@ -108,5 +111,18 @@ public class Warrior : MonoBehaviour, IWarrior
     private void FinallyDie()
     {
         Died(this);
+    }
+
+    public void Heal(float healValue)
+    {
+        if (healValue >= HealthStat.Value - currentHealth)
+        {
+            currentHealth = HealthStat.Value;
+        }
+        else
+        {
+            currentHealth += healValue;
+        }
+        HealthPercentChanged((float)currentHealth / warriorProperties.HealthStat.Value);
     }
 }
