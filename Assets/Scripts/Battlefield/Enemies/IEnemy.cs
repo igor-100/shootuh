@@ -5,6 +5,7 @@ public interface IEnemy : IAlive, IMovable, IStateable, IAnimatable, IDamageable
 {
     Transform TargetTransform { get; set; }
     float AttackRange { get; }
+    float AttackTime { get; }
     GameObject EnemyGameObject { get; }
 
     FightingState FightingState { get; }
@@ -13,9 +14,6 @@ public interface IEnemy : IAlive, IMovable, IStateable, IAnimatable, IDamageable
     DyingState DyingState { get; }
     IdleState IdleState { get; }
 
-    event Action AttackCompleted;
-
-    void WaitForNextAttack();
     void RotateTowardsTheTarget();
     void Walk();
     void StartDying();

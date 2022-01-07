@@ -35,7 +35,20 @@ public class EnemySpawner : MonoBehaviour, IEnemySpawner
     {
         yield return new WaitForSeconds(Random.Range(minSpawnDelay, maxSpawnDelay));
 
-        var enemyObj = resourceManager.GetPooledObject<IEnemy, EComponents>(EComponents.Enemy_HM);
+        EComponents enemyType;
+        switch (Random.Range(0, 2))
+        {
+            default:
+                enemyType = EComponents.Enemy_CM;
+                break;
+            case 0:
+                enemyType = EComponents.Enemy_CM;
+                break;
+            case 1:
+                enemyType = EComponents.Enemy_HM;
+                break;
+        }
+        var enemyObj = resourceManager.GetPooledObject<IEnemy, EComponents>(enemyType);
 
         var enemy = enemyObj.GetComponent<IEnemy>();
         UnitRepository.AddUnit(enemy);

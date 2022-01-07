@@ -4,8 +4,7 @@ public class WalkingState : FightingState
 {
     private const string walkTrigger = "walk";
 
-
-    public WalkingState(IEnemy enemy, StateMachine stateMachine) : base(enemy, stateMachine)
+    public WalkingState(IEnemy enemy) : base(enemy)
     {
     }
 

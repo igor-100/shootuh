@@ -1,6 +1,6 @@
 public class DyingState : State
 {
-    public DyingState(IEnemy enemy, StateMachine stateMachine) : base(enemy, stateMachine)
+    public DyingState(IEnemy enemy) : base(enemy)
     {
     }
 

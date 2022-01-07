@@ -2,41 +2,46 @@ using System;
 using System.Collections;
 using UnityEngine;
 
-public class Enemy : MonoBehaviour, IEnemy
+public abstract class Enemy : MonoBehaviour, IEnemy
 {
-    private const string PlayerMaskName = "Player";
-    private const string DieTrigger = "die";
+    protected const string PlayerMaskName = "Player";
+    protected const string DieTrigger = "die";
 
     public event Action<IAlive> Died = enemy => { };
-    public event Action AttackCompleted = () => { };
     public event Action<float> HealthPercentChanged = percent => { };
 
-    private EnemyProperties enemyProperties;
-    private float currentHealth;
-    private float currentDamage;
-    private float currentMoveSpeed;
+    protected EnemyProperties enemyProperties;
+    protected float currentHealth;
+    protected float currentDamage;
+    protected float currentMoveSpeed;
 
-    private Animator animator;
-    private Rigidbody rb;
-    private BoxCollider boxCollider;
-    private Transform targetTransform;
+    protected IResourceManager ResourceManager;
+    protected Animator animator;
+    protected Rigidbody rb;
+    protected BoxCollider boxCollider;
+    protected Transform targetTransform;
 
     public float Damage { get => currentDamage; }
     public Transform TargetTransform { get => targetTransform; set => targetTransform = value; }
     public Transform Transform { get => transform; }
     public float AttackRange { get => enemyProperties.AttackRange; }
+    public float AttackTime { get => enemyProperties.AttackTime; }
     public GameObject EnemyGameObject { get => gameObject; }
 
-    public StateMachine StateMachine { get; private set; }
-    public FightingState FightingState { get; private set; }
-    public AttackingState AttackingState { get; private set; }
-    public WalkingState WalkingState { get; private set; }
-    public DyingState DyingState { get; private set; }
-    public IdleState IdleState { get; private set; }
+    public StateMachine StateMachine { get; protected set; }
+    public FightingState FightingState { get; protected set; }
+    public AttackingState AttackingState { get; protected set; }
+    public WalkingState WalkingState { get; protected set; }
+    public DyingState DyingState { get; protected set; }
+    public IdleState IdleState { get; protected set; }
+
+    protected abstract EnemyProperties InitProperties();
 
     void Awake()
     {
-        enemyProperties = CompositionRoot.GetConfiguration().GetEnemyProperties();
+        ResourceManager = CompositionRoot.GetResourceManager();
+
+        enemyProperties = InitProperties();
 
         rb = GetComponent<Rigidbody>();
         animator = GetComponent<Animator>();
@@ -44,16 +49,14 @@ public class Enemy : MonoBehaviour, IEnemy
 
         StateMachine = new StateMachine();
 
-        FightingState = new FightingState(this, StateMachine);
-        AttackingState = new AttackingState(this, StateMachine);
-        WalkingState = new WalkingState(this, StateMachine);
-        IdleState = new IdleState(this, StateMachine);
-        DyingState = new DyingState(this, StateMachine);
-
-        
+        FightingState = new FightingState(this);
+        AttackingState = new AttackingState(this);
+        WalkingState = new WalkingState(this);
+        IdleState = new IdleState(this);
+        DyingState = new DyingState(this);
     }
 
-    private void OnEnable()
+    protected void OnEnable()
     {
         StateMachine.Initialize(WalkingState);
 
@@ -68,32 +71,6 @@ public class Enemy : MonoBehaviour, IEnemy
         StateMachine.CurrentState.PhysicsUpdate();
     }
 
-    public void WaitForNextAttack()
-    {
-        StartCoroutine(WaitingForNextAttack());
-    }
-
-    private IEnumerator WaitingForNextAttack()
-    {
-        yield return new WaitForSeconds(enemyProperties.AttackTime);
-        AttackCompleted();
-    }
-
-    // called in Animator
-    public void Attack()
-    {
-        RaycastHit objectHit;
-        if (Physics.Raycast(new Vector3(transform.position.x, transform.position.y + enemyProperties.HitHeight, transform.position.z),
-            transform.forward, out objectHit, enemyProperties.AttackRange, LayerMask.GetMask(PlayerMaskName)))
-        {
-            var warrior = objectHit.transform.GetComponent<IWarrior>();
-            if (warrior != null)
-            {
-                warrior.Hit(currentDamage);
-            }
-        }
-    }
-
     public void RotateTowardsTheTarget()
     {
         Vector3 relativePos = targetTransform.position - transform.position;
@@ -105,7 +82,7 @@ public class Enemy : MonoBehaviour, IEnemy
         rb.MovePosition(rb.position + currentMoveSpeed * Time.fixedDeltaTime * transform.forward);
     }
 
-    private void OnCollisionEnter(Collision collision)
+    protected void OnCollisionEnter(Collision collision)
     {
         var projectile = collision.gameObject.GetComponent<Projectile>();
         if (projectile)
@@ -131,7 +108,7 @@ public class Enemy : MonoBehaviour, IEnemy
         StartCoroutine(Dying());
     }
 
-    private IEnumerator Dying()
+    protected IEnumerator Dying()
     {
         Died(this);
         boxCollider.enabled = false;

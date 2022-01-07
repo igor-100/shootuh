@@ -4,5 +4,6 @@
     WeaponProperties GetRifleWeaponProperties();
     WeaponProperties GetRapidWeaponProperties();
     WarriorProperties GetWarriorProperties();
-    EnemyProperties GetEnemyProperties();
+    EnemyProperties GetEnemyHMProperties();
+    EnemyProperties GetEnemyCMProperties();
 }

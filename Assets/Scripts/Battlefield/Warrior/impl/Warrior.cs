@@ -89,6 +89,15 @@ public class Warrior : MonoBehaviour, IWarrior
         rb.rotation = Quaternion.Euler(0, angle, 0);
     }
 
+    private void OnCollisionEnter(Collision collision)
+    {
+        var projectile = collision.gameObject.GetComponent<Projectile>();
+        if (projectile)
+        {
+            Hit(projectile.Damage);
+        }
+    }
+
     public void Hit(float damage)
     {
         currentHealth -= damage;

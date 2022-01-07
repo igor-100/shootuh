@@ -1,8 +1,14 @@
+using System;
+using System.Timers;
+using UnityEngine;
+
 public class AttackingState : FightingState
 {
+    private Timer timer;
+
     private const string attackTrigger = "attack";
 
-    public AttackingState(IEnemy character, StateMachine stateMachine) : base(character, stateMachine)
+    public AttackingState(IEnemy character) : base(character)
     {
     }
 
@@ -11,11 +17,14 @@ public class AttackingState : FightingState
         base.Enter();
 
         enemy.TriggerAnimation(attackTrigger);
-        enemy.WaitForNextAttack();
-        enemy.AttackCompleted += OnAttackCompleted;
+
+        timer = new Timer(enemy.AttackTime * 1000);
+        timer.Elapsed += OnAttackCompleted;
+        timer.AutoReset = true;
+        timer.Enabled = true;
     }
 
-    private void OnAttackCompleted()
+    private void OnAttackCompleted(object sender, ElapsedEventArgs e)
     {
         enemy.StateMachine.ChangeState(enemy.WalkingState);
     }
@@ -23,7 +32,6 @@ public class AttackingState : FightingState
     public override void Exit()
     {
         base.Exit();
-
-        enemy.AttackCompleted -= OnAttackCompleted;
+        timer.Elapsed -= OnAttackCompleted;
     }
 }

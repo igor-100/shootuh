@@ -1,7 +1,7 @@
 // NOT IN USE
 public class FightingState : State
 {
-    public FightingState(IEnemy character, StateMachine stateMachine) : base(character, stateMachine)
+    public FightingState(IEnemy character) : base(character)
     {
     }
 }

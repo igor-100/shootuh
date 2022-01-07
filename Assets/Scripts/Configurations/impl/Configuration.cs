@@ -5,8 +5,11 @@ public class Configuration : IConfiguration
     private readonly WeaponProperties standardWeaponProperties;
     private readonly WeaponProperties rifleWeaponProperties;
     private readonly WeaponProperties rapidWeaponProperties;
+
     private readonly WarriorProperties warriorProperties;
-    private readonly EnemyProperties enemyProperties;
+
+    private readonly EnemyProperties enemyHMProperties;
+    private readonly EnemyProperties enemyCMProperties;
 
     public Configuration()
     {
@@ -27,9 +30,9 @@ public class Configuration : IConfiguration
             ProjectileSpeed = 25f,
             FireRate = 3f,
             ReloadTime = 1f,
-            ProjectileType = EComponents.Projectile_Red,
+            ProjectileType = EComponents.Projectile_Green,
             ModeName = "Rifle",
-            Color = new Color32(255, 9, 0, 255)
+            Color = new Color32(0, 231, 28, 255)
         };
 
         rapidWeaponProperties = new WeaponProperties()
@@ -49,7 +52,7 @@ public class Configuration : IConfiguration
             MoveSpeedStat = new CharacterStat(5f)
         };
 
-        enemyProperties = new EnemyProperties()
+        enemyHMProperties = new EnemyProperties()
         {
             HealthStat = new CharacterStat(100f),
             DamageStat = new CharacterStat(20f),
@@ -59,6 +62,18 @@ public class Configuration : IConfiguration
             DeathTime = 2f,
             AttackTime = 1f,
             AttackRange = 5f
+        };
+
+        enemyCMProperties = new EnemyProperties()
+        {
+            HealthStat = new CharacterStat(50f),
+            DamageStat = new CharacterStat(20f),
+            MoveSpeedStat = new CharacterStat(4f),
+
+            HitHeight = 0.5f,
+            DeathTime = 3f,
+            AttackTime = 2f,
+            AttackRange = 12f
         };
         
     }
@@ -83,8 +98,13 @@ public class Configuration : IConfiguration
         return warriorProperties;
     }
 
-    public EnemyProperties GetEnemyProperties()
+    public EnemyProperties GetEnemyHMProperties()
     {
-        return enemyProperties;
+        return enemyHMProperties;
+    }
+
+    public EnemyProperties GetEnemyCMProperties()
+    {
+        return enemyCMProperties;
     }
 }

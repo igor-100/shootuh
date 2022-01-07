@@ -3,10 +3,10 @@
     protected IEnemy enemy;
     protected StateMachine stateMachine;
 
-    protected State(IEnemy enemy, StateMachine stateMachine)
+    protected State(IEnemy enemy)
     {
         this.enemy = enemy;
-        this.stateMachine = stateMachine;
+        this.stateMachine = enemy.StateMachine;
     }
 
     public virtual void Enter()
