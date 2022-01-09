@@ -66,7 +66,12 @@ public abstract class Enemy : MonoBehaviour, IEnemy
         currentMoveSpeed = enemyProperties.MoveSpeedStat.Value;
     }
 
-    void FixedUpdate()
+    protected void Update()
+    {
+        StateMachine.CurrentState.LogicUpdate();
+    }
+
+    protected void FixedUpdate()
     {
         StateMachine.CurrentState.PhysicsUpdate();
     }
