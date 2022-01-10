@@ -7,6 +7,7 @@ public class UnitRepository : IUnitRepository
 
     public event Action<IAlive> UnitAdded = unit => { };
     public event Action<IAlive> UnitRemoved = unit => { };
+    public event Action AllUnitsRemoved = () => { };
 
     public void AddUnit(IAlive unit)
     {
@@ -31,5 +32,9 @@ public class UnitRepository : IUnitRepository
         unitRepository.TryGetValue(type, out List<IAlive> units);
         units.Remove(unit);
         UnitRemoved(unit);
+        if (units.Count == 0)
+        {
+            AllUnitsRemoved();
+        }
     }
 }

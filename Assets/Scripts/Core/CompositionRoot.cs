@@ -84,7 +84,7 @@ public class CompositionRoot : MonoBehaviour
         if (EnemySpawner == null)
         {
             var resourceManager = GetResourceManager();
-            EnemySpawner = resourceManager.CreatePrefabInstance<IEnemySpawner, EComponents>(EComponents.Enemy_Spawner);
+            EnemySpawner = resourceManager.CreatePrefabInstance<IEnemySpawner, EComponents>(EComponents.Enemy_Random_Spawner);
         }
 
         return EnemySpawner;

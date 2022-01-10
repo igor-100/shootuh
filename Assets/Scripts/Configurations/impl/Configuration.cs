@@ -1,4 +1,6 @@
 ﻿using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
 
 public class Configuration : IConfiguration
 {
@@ -10,6 +12,8 @@ public class Configuration : IConfiguration
 
     private readonly EnemyProperties enemyHMProperties;
     private readonly EnemyProperties enemyCMProperties;
+
+    private readonly EnemySpawnerProperties enemySpawnerProperties;
 
     public Configuration()
     {
@@ -75,36 +79,61 @@ public class Configuration : IConfiguration
             AttackTime = 2f,
             AttackRange = 12f
         };
-        
+
+        enemySpawnerProperties = new EnemySpawnerProperties()
+        {
+            EnemiesWaves = new List<EnemiesWave>()
+            {
+            new EnemiesWave()
+            {
+                MinSpawnDelay = 1f,
+                MaxSpawnDelay = 3f,
+                EnemiesByNumber = new Dictionary<EComponents, int>()
+                {
+                    {EComponents.Enemy_HM, 10}
+                }
+            },
+            new EnemiesWave()
+            {
+                MinSpawnDelay = 0.5f,
+                MaxSpawnDelay = 2f,
+                EnemiesByNumber = new Dictionary<EComponents, int>()
+                {
+                    {EComponents.Enemy_CM, 20} 
+                }
+            },
+            new EnemiesWave()
+            {
+                MinSpawnDelay = 0.5f,
+                MaxSpawnDelay = 2f,
+                EnemiesByNumber = new Dictionary<EComponents, int>()
+                {
+                    {EComponents.Enemy_CM, 20},
+                    {EComponents.Enemy_HM, 20} 
+                }
+            },
+            new EnemiesWave()
+            {
+                MinSpawnDelay = 0.2f,
+                MaxSpawnDelay = 0.8f,
+                EnemiesByNumber = new Dictionary<EComponents, int>()
+                {
+                    {EComponents.Enemy_CM, 100},
+                    {EComponents.Enemy_HM, 100} 
+                }
+            },
+            }
+        };
     }
 
-    public WeaponProperties GetStandardWeaponProperties()
-    {
-        return standardWeaponProperties;
-    }
+    public WeaponProperties GetStandardWeaponProperties() => standardWeaponProperties;
+    public WeaponProperties GetRifleWeaponProperties() => rifleWeaponProperties;
+    public WeaponProperties GetRapidWeaponProperties() => rapidWeaponProperties;
 
-    public WeaponProperties GetRifleWeaponProperties()
-    {
-        return rifleWeaponProperties;
-    }
+    public WarriorProperties GetWarriorProperties() => warriorProperties;
 
-    public WeaponProperties GetRapidWeaponProperties()
-    {
-        return rapidWeaponProperties;
-    }
+    public EnemyProperties GetEnemyHMProperties() => enemyHMProperties;
+    public EnemyProperties GetEnemyCMProperties() => enemyCMProperties;
 
-    public WarriorProperties GetWarriorProperties()
-    {
-        return warriorProperties;
-    }
-
-    public EnemyProperties GetEnemyHMProperties()
-    {
-        return enemyHMProperties;
-    }
-
-    public EnemyProperties GetEnemyCMProperties()
-    {
-        return enemyCMProperties;
-    }
+    public EnemySpawnerProperties GetEnemySpawnerProperties() => enemySpawnerProperties;
 }

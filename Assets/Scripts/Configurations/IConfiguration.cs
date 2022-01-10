@@ -6,4 +6,5 @@
     WarriorProperties GetWarriorProperties();
     EnemyProperties GetEnemyHMProperties();
     EnemyProperties GetEnemyCMProperties();
+    EnemySpawnerProperties GetEnemySpawnerProperties();
 }

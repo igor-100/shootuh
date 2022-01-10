@@ -4,7 +4,7 @@ public enum EComponents
     Warrior,
     Enemy_HM,
     Enemy_CM,
-    Enemy_Spawner,
+    Enemy_Random_Spawner,
     Environment,
     SceneLoader,
     UIRoot,
