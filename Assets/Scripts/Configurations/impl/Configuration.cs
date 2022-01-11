@@ -82,46 +82,121 @@ public class Configuration : IConfiguration
 
         enemySpawnerProperties = new EnemySpawnerProperties()
         {
-            EnemiesWaves = new List<EnemiesWave>()
+            Waves = new List<Wave>()
             {
-            new EnemiesWave()
+            new Wave()
             {
+                Id = 1,
+                DelayAfterWave = 5f,
                 MinSpawnDelay = 1f,
                 MaxSpawnDelay = 3f,
-                EnemiesByNumber = new Dictionary<EComponents, int>()
+                IsParallelSpawning = false,
+                SpawnPoints = new List<SpawnPoint>()
                 {
-                    {EComponents.Enemy_HM, 10}
+
+                    new SpawnPoint()
+                    {
+                        PointPosition = new Vector3(60f, 0, 60f),
+                        EnemiesByNumber = new Dictionary<EComponents, int>()
+                        {
+                            {EComponents.Enemy_HM, 5}
+                        }
+                    },
+                    new SpawnPoint()
+                    {
+                        PointPosition = new Vector3(-60f, 0, 60f),
+                        EnemiesByNumber = new Dictionary<EComponents, int>()
+                        {
+                            {EComponents.Enemy_HM, 5}
+                        }
+                    },
                 }
             },
-            new EnemiesWave()
+            new Wave()
             {
+                Id = 2,
+                DelayAfterWave = 5f,
                 MinSpawnDelay = 0.5f,
                 MaxSpawnDelay = 2f,
-                EnemiesByNumber = new Dictionary<EComponents, int>()
+                IsParallelSpawning = true,
+                SpawnPoints = new List<SpawnPoint>()
                 {
-                    {EComponents.Enemy_CM, 20} 
+                    new SpawnPoint()
+                    {
+                        PointPosition = new Vector3(-60f, 0, -60f),
+                        EnemiesByNumber = new Dictionary<EComponents, int>()
+                        {
+                            {EComponents.Enemy_CM, 10}
+                        }
+                    },
+                    new SpawnPoint()
+                    {
+                        PointPosition = new Vector3(60f, 0, 60f),
+                        EnemiesByNumber = new Dictionary<EComponents, int>()
+                        {
+                            {EComponents.Enemy_CM, 10}
+                        }
+                    },
                 }
             },
-            new EnemiesWave()
+            new Wave()
             {
+                Id = 3,
+                DelayAfterWave = 10f,
                 MinSpawnDelay = 0.5f,
                 MaxSpawnDelay = 2f,
-                EnemiesByNumber = new Dictionary<EComponents, int>()
+                IsParallelSpawning = false,
+                SpawnPoints = new List<SpawnPoint>()
                 {
-                    {EComponents.Enemy_CM, 20},
-                    {EComponents.Enemy_HM, 20} 
+                    new SpawnPoint()
+                    {
+                        PointPosition = new Vector3(60f, 0, -60f),
+                        EnemiesByNumber = new Dictionary<EComponents, int>()
+                        {
+                            {EComponents.Enemy_CM, 20},
+                            {EComponents.Enemy_HM, 20},
+                        }
+                    },
+                    new SpawnPoint()
+                    {
+                        PointPosition = new Vector3(-60f, 0, 60f),
+                        EnemiesByNumber = new Dictionary<EComponents, int>()
+                        {
+                            {EComponents.Enemy_CM, 20},
+                            {EComponents.Enemy_HM, 20},
+                        }
+                    },
                 }
             },
-            new EnemiesWave()
+            new Wave()
             {
+                Id = 4,
+                DelayAfterWave = 5f,
                 MinSpawnDelay = 0.2f,
                 MaxSpawnDelay = 0.8f,
-                EnemiesByNumber = new Dictionary<EComponents, int>()
+                IsParallelSpawning = true,
+                SpawnPoints = new List<SpawnPoint>()
                 {
-                    {EComponents.Enemy_CM, 100},
-                    {EComponents.Enemy_HM, 100} 
+                    new SpawnPoint()
+                    {
+                        PointPosition = new Vector3(60f, 0, -60f),
+                        EnemiesByNumber = new Dictionary<EComponents, int>()
+                        {
+                            {EComponents.Enemy_CM, 50},
+                            {EComponents.Enemy_HM, 50},
+                        }
+                    },
+                    new SpawnPoint()
+                    {
+                        PointPosition = new Vector3(-60f, 0, 60f),
+                        EnemiesByNumber = new Dictionary<EComponents, int>()
+                        {
+                            {EComponents.Enemy_CM, 50},
+                            {EComponents.Enemy_HM, 50},
+                        }
+                    },
                 }
-            },
+            }
             }
         };
     }

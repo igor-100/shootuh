@@ -4,59 +4,88 @@ using UnityEngine;
 
 public class EnemySpawner : MonoBehaviour, IEnemySpawner
 {
-    [SerializeField] private float minSpawnDelay = 3f;
-    [SerializeField] private float maxSpawnDelay = 10f;
-    [SerializeField] private float maxSpawnXDistance = 75f;
-    [SerializeField] private float maxSpawnZDistance = 75f;
-
-    private IResourceManager resourceManager;
+    private IResourceManager ResourceManager;
     private IUnitRepository UnitRepository;
+    private IWarrior Warrior;
+    private EnemySpawnerProperties EnemySpawnerProperties;
 
     private bool spawn = true;
-    private IWarrior warrior;
 
     private void Awake()
     {
-        resourceManager = CompositionRoot.GetResourceManager();
-        warrior = CompositionRoot.GetWarrior();
+        EnemySpawnerProperties = CompositionRoot.GetConfiguration().GetEnemySpawnerProperties();
+        ResourceManager = CompositionRoot.GetResourceManager();
+        Warrior = CompositionRoot.GetWarrior();
         UnitRepository = CompositionRoot.GetUnitRepository();
     }
 
-    // Start is called before the first frame update
     private IEnumerator Start()
     {
         while (spawn)
         {
-            yield return StartCoroutine(SpawnEnemy());
+            yield return StartCoroutine(SpawnAllWaves(EnemySpawnerProperties.Waves));
         }
     }
 
-    private IEnumerator SpawnEnemy()
+    private IEnumerator SpawnAllWaves(List<Wave> waves)
     {
-        yield return new WaitForSeconds(Random.Range(minSpawnDelay, maxSpawnDelay));
-
-        EComponents enemyType;
-        switch (Random.Range(0, 2))
+        foreach (var wave in waves)
         {
-            default:
-                enemyType = EComponents.Enemy_CM;
-                break;
-            case 0:
-                enemyType = EComponents.Enemy_CM;
-                break;
-            case 1:
-                enemyType = EComponents.Enemy_HM;
-                break;
+            yield return StartCoroutine(SpawnWave(wave));
         }
-        var enemyObj = resourceManager.GetPooledObject<IEnemy, EComponents>(enemyType);
+    }
+
+    private IEnumerator SpawnWave(Wave wave)
+    {
+        Debug.Log("Wave " + wave.Id);
+        if (wave.IsParallelSpawning)
+        {
+            // TODO: Implement parallel spawning. Create separate monobeh game objects for spawnpoints?
+            foreach (var spawnPoint in wave.SpawnPoints)
+            {
+                yield return StartCoroutine(SpawnEnemiesAtSpawnPoint(wave, spawnPoint));
+            }
+        }
+        else
+        {
+            foreach (var spawnPoint in wave.SpawnPoints)
+            {
+                yield return StartCoroutine(SpawnEnemiesAtSpawnPoint(wave, spawnPoint));
+            }
+        }
+    }
+
+    private IEnumerator SpawnEnemiesAtSpawnPoint(Wave wave, SpawnPoint spawnPoint)
+    {
+        foreach (var enemyByNumber in spawnPoint.EnemiesByNumber)
+        {
+            var enemyType = enemyByNumber.Key;
+            var numberOfEnemies = enemyByNumber.Value;
+
+            for (int i = 0; i < numberOfEnemies; i++)
+            {
+                SpawnEnemy(spawnPoint, enemyType);
+
+                yield return new WaitForSeconds(Random.Range(wave.MinSpawnDelay, wave.MaxSpawnDelay));
+            }
+            yield return new WaitForSeconds(Random.Range(wave.MinSpawnDelay, wave.MaxSpawnDelay));
+        }
+        yield return new WaitForSeconds(wave.DelayAfterWave);
+    }
+
+    private void SpawnEnemy(SpawnPoint spawnPoint, EComponents enemyType)
+    {
+        var spawnPointTransform = new Vector3(spawnPoint.PointPosition.x + Random.Range(-5f, 5f), spawnPoint.PointPosition.y,
+                                    spawnPoint.PointPosition.z + Random.Range(-5f, 5f));
+
+        var enemyObj = ResourceManager.GetPooledObject<IEnemy, EComponents>(enemyType);
 
         var enemy = enemyObj.GetComponent<IEnemy>();
         UnitRepository.AddUnit(enemy);
 
-        enemy.TargetTransform = warrior.Transform;
+        enemy.TargetTransform = Warrior.Transform;
 
-        Vector3 randomSpot = new Vector3(Random.Range(maxSpawnXDistance, -maxSpawnXDistance), 0, Random.Range(maxSpawnZDistance, -maxSpawnZDistance));
-        enemyObj.transform.position = randomSpot;
+        enemyObj.transform.position = spawnPointTransform;
         enemyObj.transform.rotation = transform.rotation;
         enemyObj.SetActive(true);
     }
