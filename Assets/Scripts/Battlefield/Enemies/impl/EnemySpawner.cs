@@ -1,12 +1,10 @@
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class EnemySpawner : MonoBehaviour, IEnemySpawner
 {
-    private IResourceManager ResourceManager;
-    private IUnitRepository UnitRepository;
-    private IWarrior Warrior;
     private EnemySpawnerProperties EnemySpawnerProperties;
 
     private bool spawn = true;
@@ -14,9 +12,6 @@ public class EnemySpawner : MonoBehaviour, IEnemySpawner
     private void Awake()
     {
         EnemySpawnerProperties = CompositionRoot.GetConfiguration().GetEnemySpawnerProperties();
-        ResourceManager = CompositionRoot.GetResourceManager();
-        Warrior = CompositionRoot.GetWarrior();
-        UnitRepository = CompositionRoot.GetUnitRepository();
     }
 
     private IEnumerator Start()
@@ -40,53 +35,45 @@ public class EnemySpawner : MonoBehaviour, IEnemySpawner
         Debug.Log("Wave " + wave.Id);
         if (wave.IsParallelSpawning)
         {
-            // TODO: Implement parallel spawning. Create separate monobeh game objects for spawnpoints?
-            foreach (var spawnPoint in wave.SpawnPoints)
-            {
-                yield return StartCoroutine(SpawnEnemiesAtSpawnPoint(wave, spawnPoint));
-            }
+            yield return StartCoroutine(SpawnWaveInParallel(wave));
         }
         else
         {
-            foreach (var spawnPoint in wave.SpawnPoints)
-            {
-                yield return StartCoroutine(SpawnEnemiesAtSpawnPoint(wave, spawnPoint));
-            }
-        }
-    }
-
-    private IEnumerator SpawnEnemiesAtSpawnPoint(Wave wave, SpawnPoint spawnPoint)
-    {
-        foreach (var enemyByNumber in spawnPoint.EnemiesByNumber)
-        {
-            var enemyType = enemyByNumber.Key;
-            var numberOfEnemies = enemyByNumber.Value;
-
-            for (int i = 0; i < numberOfEnemies; i++)
-            {
-                SpawnEnemy(spawnPoint, enemyType);
-
-                yield return new WaitForSeconds(Random.Range(wave.MinSpawnDelay, wave.MaxSpawnDelay));
-            }
-            yield return new WaitForSeconds(Random.Range(wave.MinSpawnDelay, wave.MaxSpawnDelay));
+            yield return StartCoroutine(SpawnWaveSequentially(wave));
         }
         yield return new WaitForSeconds(wave.DelayAfterWave);
     }
 
-    private void SpawnEnemy(SpawnPoint spawnPoint, EComponents enemyType)
+    private IEnumerator SpawnWaveInParallel(Wave wave)
     {
-        var spawnPointTransform = new Vector3(spawnPoint.PointPosition.x + Random.Range(-5f, 5f), spawnPoint.PointPosition.y,
-                                    spawnPoint.PointPosition.z + Random.Range(-5f, 5f));
+        List<SpawnPoint> spawnPoints = wave.SpawnPoints;
 
-        var enemyObj = ResourceManager.GetPooledObject<IEnemy, EComponents>(enemyType);
+        int seed = 0;
+        int waveDelay = (int)(spawnPoints.Select(spawnPoint => spawnPoint.EnemiesByNumber)
+            .Aggregate(seed, (x, y) => x + y.Values.ToList().Sum()) * wave.MaxSpawnDelay);
 
-        var enemy = enemyObj.GetComponent<IEnemy>();
-        UnitRepository.AddUnit(enemy);
+        for (int i = 0; i < wave.SpawnPoints.Count; i++)
+        {
+            SpawnPoint spawnPoint = wave.SpawnPoints[i];
 
-        enemy.TargetTransform = Warrior.Transform;
+            var gameObject = new GameObject("EnemySpawnerPoint", typeof(EnemySpawnerPoint));
+            gameObject.transform.position = spawnPoint.PointPosition;
+            var spawnerPoint = gameObject.GetComponent<EnemySpawnerPoint>();
 
-        enemyObj.transform.position = spawnPointTransform;
-        enemyObj.transform.rotation = transform.rotation;
-        enemyObj.SetActive(true);
+            spawnerPoint.TriggerSpawning(wave, spawnPoint);
+        }
+        yield return new WaitForSeconds(waveDelay);
+    }
+
+    private IEnumerator SpawnWaveSequentially(Wave wave)
+    {
+        foreach (var spawnPoint in wave.SpawnPoints)
+        {
+            var gameObject = new GameObject("EnemySpawnerPoint", typeof(EnemySpawnerPoint));
+            gameObject.transform.position = spawnPoint.PointPosition;
+            var spawnerPoint = gameObject.GetComponent<EnemySpawnerPoint>();
+
+            yield return StartCoroutine(spawnerPoint.SpawnEnemiesAtSpawnPoint(wave, spawnPoint));
+        }
     }
 }
