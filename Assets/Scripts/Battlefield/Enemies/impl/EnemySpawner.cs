@@ -94,6 +94,5 @@ public class EnemySpawner : MonoBehaviour, IEnemySpawner
 
         enemyObj.transform.position = spawnPointTransform;
         enemyObj.transform.rotation = transform.rotation;
-        enemyObj.SetActive(true);
     }
 }

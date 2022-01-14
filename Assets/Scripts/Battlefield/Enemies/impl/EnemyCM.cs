@@ -17,6 +17,5 @@ public class EnemyCM : Enemy
         var projectileObj = ResourceManager.GetPooledObject<IProjectile, EComponents>(EComponents.Projectile_Red);
         projectileObj.transform.position = gunTransform.position;
         projectileObj.GetComponent<Rigidbody>().velocity = gunTransform.forward * projectileSpeed;
-        projectileObj.SetActive(true);
     }
 }

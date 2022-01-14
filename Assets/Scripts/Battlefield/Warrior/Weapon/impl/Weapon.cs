@@ -63,7 +63,6 @@ public abstract class Weapon : MonoBehaviour, IWeapon
         var projectileObj = ResourceManager.GetPooledObject<IProjectile, EComponents>(weaponProperties.ProjectileType);
         projectileObj.transform.position = transform.parent.position;
         projectileObj.GetComponent<Rigidbody>().velocity = transform.parent.forward * weaponProperties.ProjectileSpeed;
-        projectileObj.SetActive(true);
     }
 
     private void OnReload()

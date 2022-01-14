@@ -45,12 +45,16 @@ public class ResourceManager : IResourceManager
         {
             if (!obj.activeSelf)
             {
+                obj.SetActive(true);
+
                 return obj;
             }
         }
 
         var tmp = CreatePrefabInstance(item);
         pooledObjects.Add(tmp);
+
+        tmp.SetActive(true);
 
         return tmp;
     }
