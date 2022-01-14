@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class GameOverScreenView : BaseView, IGameOverScreenView
 {
+    private ILevelSystem LevelSystem;
+
     public event Action RestartClicked;
     public event Action QuitClicked;
 
@@ -14,11 +16,10 @@ public class GameOverScreenView : BaseView, IGameOverScreenView
 
     private void Awake()
     {
-        var levelSystem = CompositionRoot.GetLevelSystem();
+        LevelSystem = CompositionRoot.GetLevelSystem();
 
         restartButton.onClick.AddListener(OnRestartClicked);
         quitButton.onClick.AddListener(OnQuitClcked);
-        pointsText.text = "Level: " + levelSystem.GetLevel();
     }
 
     public void OnRestartClicked()
@@ -29,5 +30,11 @@ public class GameOverScreenView : BaseView, IGameOverScreenView
     public void OnQuitClcked()
     {
         QuitClicked();
+    }
+
+    public override void Show()
+    {
+        gameObject.SetActive(true);
+        pointsText.text = "Level: " + LevelSystem.GetLevel();
     }
 }

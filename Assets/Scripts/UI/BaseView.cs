@@ -2,15 +2,15 @@
 
 public abstract class BaseView : MonoBehaviour, IView
 {
-    public void Show()
+    public virtual void Show()
     {
         gameObject.SetActive(true);
     }
-    public void Hide()
+    public virtual void Hide()
     {
         gameObject.SetActive(false);
     }
-    public void SetParent(Transform parentCanvas)
+    public virtual void SetParent(Transform parentCanvas)
     {
         transform.SetParent(parentCanvas, false);
     }
