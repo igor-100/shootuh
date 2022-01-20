@@ -1,27 +1,45 @@
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using UnityEngine;
 
-public class LevelSystem : ILevelSystem
+[JsonObject(MemberSerialization.OptIn)]
+public class LevelSystem : MonoBehaviour, ILevelSystem, ISaveable
 {
     private const int experienceForEnemy = 10;
 
+    [JsonProperty]
     private int level;
+    [JsonProperty]
     private int experience;
+    [JsonProperty]
     private int experienceToNextLevel;
 
     private IUnitRepository UnitRepository;
+    private ISaveManager SaveManager;
 
     public event Action<float> ExperiencePercentChanged = percent => { };
     public event Action<int> LevelUp = level => { };
+    public event Action<ISaveable> Initialized;
 
-    public LevelSystem()
+    private void Awake()
     {
+        SaveManager = CompositionRoot.GetSaveManager();
         UnitRepository = CompositionRoot.GetUnitRepository();
+        
         UnitRepository.UnitRemoved += OnUnitRemoved;
+        SaveManager.AddToSaveRegistry(this);
+    }
 
-        level = 1;
-        experience = 0;
-        experienceToNextLevel = 100;
+    private void Start()
+    {
+        if (!SaveManager.TryLoading(this))
+        {
+            level = 1;
+            experience = 0;
+            experienceToNextLevel = 100;
+            ExperiencePercentChanged((float)experience / experienceToNextLevel);
+        }
     }
 
     private void OnUnitRemoved(IAlive obj)
@@ -54,5 +72,15 @@ public class LevelSystem : ILevelSystem
     public float GetExperiencePercent()
     {
         return experience;
+    }
+
+    public void PrepareSaveData() { }
+
+    public void LoadData(JToken jToken)
+    {
+        this.level = jToken.SelectToken("level").ToObject<int>();
+        this.experience = jToken.SelectToken("experience").ToObject<int>();
+        this.experienceToNextLevel = jToken.SelectToken("experienceToNextLevel").ToObject<int>();
+        ExperiencePercentChanged((float)experience / experienceToNextLevel);
     }
 }

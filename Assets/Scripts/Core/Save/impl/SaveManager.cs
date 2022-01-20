@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using UnityEngine;
@@ -8,11 +6,12 @@ using UnityEngine;
 public class SaveManager : MonoBehaviour, ISaveManager
 {
     private List<ISaveable> saveRegistry = new List<ISaveable>();
-    private ISceneLoader SceneLoader;
 
-    private void Awake() {
-        SceneLoader = CompositionRoot.GetSceneLoader();
+    private bool IsLoading;
+    private JObject currentLoadingData;
 
+    private void Awake()
+    {
         SaveSystem.Init();
         DontDestroyOnLoad(this);
     }
@@ -20,6 +19,22 @@ public class SaveManager : MonoBehaviour, ISaveManager
     public void AddToSaveRegistry<T>(T saveObject) where T : ISaveable
     {
         saveRegistry.Add(saveObject);
+    }
+
+    public bool TryLoading<T>(T saveObject) where T : ISaveable
+    {
+        if (IsLoading)
+        {
+            foreach (var item in currentLoadingData.Children<JProperty>())
+            {
+                if (item.Name.Equals(saveObject.GetType().ToString()))
+                {
+                    saveObject.LoadData(item.First);
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     public void ResetSaveRegistry()
@@ -46,28 +61,17 @@ public class SaveManager : MonoBehaviour, ISaveManager
     public void Load()
     {
         ResetSaveRegistry();
-        SceneLoader.LoadNextScene();
 
-        StartCoroutine(WaitForObjectsToInitialize());
-    }
-
-    private IEnumerator WaitForObjectsToInitialize()
-    {
-        yield return new WaitForSeconds(0.01f);
+        IsLoading = true;
 
         var json = SaveSystem.Load();
-        JObject jObject = JObject.Parse(json);
-        foreach (var item in jObject.Children<JProperty>())
-        {
-            var saveObject = saveRegistry.Find(saveObject => item.Name.Equals(saveObject.GetType().ToString()));
-            if (saveObject != null)
-            {
-                saveObject.LoadData(item.First);
-            }
-            else
-            {
-                Debug.LogWarning(item.Name + " object was not found in save registry while loading");
-            }
-        }
+        currentLoadingData = JObject.Parse(json);
+    }
+
+    public void New()
+    {
+        ResetSaveRegistry();
+
+        IsLoading = false;
     }
 }

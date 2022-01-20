@@ -2,29 +2,49 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
 
-public class EnemySpawner : MonoBehaviour, IEnemySpawner
+[JsonObject(MemberSerialization.OptIn)]
+public class EnemySpawner : MonoBehaviour, IEnemySpawner, ISaveable
 {
     private IResourceManager ResourceManager;
     private IUnitRepository UnitRepository;
     private IWarrior Warrior;
     private EnemySpawnerProperties EnemySpawnerProperties;
+    private ISaveManager SaveManager;
+
+    [JsonProperty]
+    private int currentWaveId = 0;
 
     private bool spawn = true;
 
     private void Awake()
     {
+        SaveManager = CompositionRoot.GetSaveManager();
         EnemySpawnerProperties = CompositionRoot.GetConfiguration().GetEnemySpawnerProperties();
         ResourceManager = CompositionRoot.GetResourceManager();
         Warrior = CompositionRoot.GetWarrior();
         UnitRepository = CompositionRoot.GetUnitRepository();
+
+        SaveManager.AddToSaveRegistry(this);
     }
 
     private IEnumerator Start()
     {
-        while (spawn)
+        if (SaveManager.TryLoading(this))
         {
-            yield return StartCoroutine(SpawnAllWaves(EnemySpawnerProperties.Waves));
+            while (spawn)
+            {
+                yield return StartCoroutine(SpawnWavesFrom(EnemySpawnerProperties.Waves, currentWaveId));
+            }
+        }
+        else
+        {
+            while (spawn)
+            {
+                yield return StartCoroutine(SpawnAllWaves(EnemySpawnerProperties.Waves));
+            }
         }
     }
 
@@ -36,9 +56,19 @@ public class EnemySpawner : MonoBehaviour, IEnemySpawner
         }
     }
 
+    private IEnumerator SpawnWavesFrom(List<Wave> waves, int startingWaveId)
+    {
+        for (int i = startingWaveId; i < waves.Count; i++)
+        {
+            var wave = waves[i];
+            yield return StartCoroutine(SpawnWave(wave));
+        }
+    }
+
     private IEnumerator SpawnWave(Wave wave)
     {
         Debug.Log("Wave " + wave.Id);
+        currentWaveId = wave.Id;
         if (wave.IsParallelSpawning)
         {
             List<SpawnPoint> spawnPoints = wave.SpawnPoints;
@@ -94,5 +124,12 @@ public class EnemySpawner : MonoBehaviour, IEnemySpawner
 
         enemyObj.transform.position = spawnPointTransform;
         enemyObj.transform.rotation = transform.rotation;
+    }
+
+    public void PrepareSaveData() { }
+
+    public void LoadData(JToken jToken)
+    {
+        this.currentWaveId = jToken.SelectToken("currentWaveId").ToObject<int>();
     }
 }

@@ -21,7 +21,8 @@ public class MainMenuScreen : MonoBehaviour, IMainMenuScreen
 
     private void OnStartClicked()
     {
-        SceneLoader.LoadNextScene();
+        SaveManager.New();
+        SceneLoader.LoadScene(EScenes.GameScene);
     }
 
     private void OnQuitClicked()
@@ -32,6 +33,7 @@ public class MainMenuScreen : MonoBehaviour, IMainMenuScreen
     private void OnLoadClicked()
     {
         SaveManager.Load();
+        SceneLoader.LoadScene(EScenes.GameScene);
     }
 
     public void Hide()

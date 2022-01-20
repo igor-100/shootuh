@@ -127,7 +127,8 @@ public class CompositionRoot : MonoBehaviour
     {
         if (LevelSystem == null)
         {
-            LevelSystem = new LevelSystem();
+            var gameObject = new GameObject("LevelSystem");
+            LevelSystem = gameObject.AddComponent<LevelSystem>();
         }
 
         return LevelSystem;

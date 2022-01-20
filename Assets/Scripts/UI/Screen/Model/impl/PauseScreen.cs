@@ -46,6 +46,7 @@ public class PauseScreen : MonoBehaviour, IPauseScreen
     private void OnRestartClicked()
     {
         ToNormalSpeed();
+        SaveManager.New();
         SceneLoader.RestartScene();
     }
 

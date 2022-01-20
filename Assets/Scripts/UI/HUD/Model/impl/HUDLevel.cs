@@ -10,15 +10,14 @@ public class HUDLevel : MonoBehaviour, IHUDLevel
         var viewFactory = CompositionRoot.GetViewFactory();
         View = viewFactory.CreateHUDLevel();
         LevelSystem = CompositionRoot.GetLevelSystem();
+
+        LevelSystem.ExperiencePercentChanged += OnExperiencePercentChanged;
+        LevelSystem.LevelUp += OnLevelUp;
     }
 
     private void Start()
     {
         View.SetLevelText(LevelSystem.GetLevel().ToString());
-        View.SetLevelBarPercent(LevelSystem.GetExperiencePercent());
-
-        LevelSystem.ExperiencePercentChanged += OnExperiencePercentChanged;
-        LevelSystem.LevelUp += OnLevelUp;
     }
 
     private void OnExperiencePercentChanged(float levelPercent)
