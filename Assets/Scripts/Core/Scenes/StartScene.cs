@@ -7,6 +7,7 @@ public class StartScene : MonoBehaviour
     private void Awake()
     {
         var uiRoot = CompositionRoot.GetUIRoot();
+        var saveManager = CompositionRoot.GetSaveManager();
 
         MainMenuScreen = CompositionRoot.GetMainMenuScreen();
         MainMenuScreen.Show();

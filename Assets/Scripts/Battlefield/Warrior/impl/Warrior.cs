@@ -1,7 +1,10 @@
 using System;
 using UnityEngine;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
-public class Warrior : MonoBehaviour, IWarrior
+[JsonObject(MemberSerialization.OptIn)]
+public class Warrior : MonoBehaviour, IWarrior, ISaveable
 {
     private const string IsRunning = "isRunning";
     private const float GameOverDelay = 2f;
@@ -12,15 +15,25 @@ public class Warrior : MonoBehaviour, IWarrior
 
     [SerializeField] private WeaponHolder weaponHolder;
 
+    private ISaveManager SaveManager;
+
     private Rigidbody rb;
     private Animator animator;
 
     private Vector3 movement;
     private bool isMoving;
 
+    [JsonProperty]
     private WarriorProperties warriorProperties;
+
+    [JsonProperty]
     private float currentHealth;
-    private float moveSpeed;
+
+    [JsonProperty]
+    private float currentMoveSpeed;
+
+    [JsonProperty]
+    private float[] currentPositionXZ;
 
     public CharacterStat HealthStat => warriorProperties.HealthStat;
     public CharacterStat MoveSpeedStat => warriorProperties.MoveSpeedStat;
@@ -29,8 +42,11 @@ public class Warrior : MonoBehaviour, IWarrior
 
     private void Awake()
     {
+        SaveManager = CompositionRoot.GetSaveManager();
         var playerInput = CompositionRoot.GetPlayerInput();
         warriorProperties = CompositionRoot.GetConfiguration().GetWarriorProperties();
+
+        SaveManager.AddToSaveRegistry(this);
 
         playerInput.Move += OnMove;
 
@@ -38,7 +54,12 @@ public class Warrior : MonoBehaviour, IWarrior
         animator = GetComponent<Animator>();
 
         currentHealth = warriorProperties.HealthStat.Value;
-        moveSpeed = warriorProperties.MoveSpeedStat.Value;
+        currentMoveSpeed = warriorProperties.MoveSpeedStat.Value;
+    }
+
+    private void Start()
+    {
+        
     }
 
     void Update()
@@ -60,7 +81,7 @@ public class Warrior : MonoBehaviour, IWarrior
 
     private void Move()
     {
-        rb.MovePosition(rb.position + moveSpeed * Time.fixedDeltaTime * movement);
+        rb.MovePosition(rb.position + currentMoveSpeed * Time.fixedDeltaTime * movement);
     }
 
 
@@ -133,5 +154,19 @@ public class Warrior : MonoBehaviour, IWarrior
             currentHealth += healValue;
         }
         HealthPercentChanged((float)currentHealth / warriorProperties.HealthStat.Value);
+    }
+
+    public void PrepareSaveData()
+    {
+        this.currentPositionXZ = new float[] { transform.position.x, transform.position.z };
+    }
+
+    public void LoadData(JToken jToken)
+    {
+        this.currentHealth = (float) jToken.SelectToken("currentHealth");
+        HealthPercentChanged((float)currentHealth / warriorProperties.HealthStat.Value);
+        this.currentMoveSpeed = (float) jToken.SelectToken("currentMoveSpeed");
+        var curPos = jToken.SelectToken("currentPositionXZ").ToObject<float[]>();
+        transform.position = new Vector3(curPos[0], 0, curPos[1]);
     }
 }

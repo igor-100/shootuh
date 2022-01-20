@@ -15,6 +15,7 @@ public class CompositionRoot : MonoBehaviour
     private static ILevelSystem LevelSystem;
     private static IUnitRepository UnitRepository;
     private static IResourceManager ResourceManager;
+    private static ISaveManager SaveManager;
     private static IConfiguration Configuration;
 
     private static IHUDWeapon HUDWeapon;
@@ -130,6 +131,17 @@ public class CompositionRoot : MonoBehaviour
         }
 
         return LevelSystem;
+    }
+
+    public static ISaveManager GetSaveManager()
+    {
+        if (SaveManager == null)
+        {
+            var gameObject = new GameObject("SaveManager");
+            SaveManager = gameObject.AddComponent<SaveManager>();
+        }
+
+        return SaveManager;
     }
 
     public static IUnitRepository GetUnitRepository()

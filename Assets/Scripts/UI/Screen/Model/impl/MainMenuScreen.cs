@@ -4,16 +4,24 @@ public class MainMenuScreen : MonoBehaviour, IMainMenuScreen
 {
     private IMainMenuScreenView View;
     private ISceneLoader SceneLoader;
+    private ISaveManager SaveManager;
 
     private void Awake()
     {
         SceneLoader = CompositionRoot.GetSceneLoader();
+        SaveManager = CompositionRoot.GetSaveManager();
         var viewFactory = CompositionRoot.GetViewFactory();
 
         View = viewFactory.CreateMainMenuScreen();
 
         View.StartClicked += OnStartClicked;
+        View.LoadClicked += OnLoadClicked;
         View.QuitClicked += OnQuitClicked;
+    }
+
+    private void OnStartClicked()
+    {
+        SceneLoader.LoadNextScene();
     }
 
     private void OnQuitClicked()
@@ -21,9 +29,9 @@ public class MainMenuScreen : MonoBehaviour, IMainMenuScreen
         SceneLoader.Quit();
     }
 
-    private void OnStartClicked()
+    private void OnLoadClicked()
     {
-        SceneLoader.LoadNextScene();
+        SaveManager.Load();
     }
 
     public void Hide()

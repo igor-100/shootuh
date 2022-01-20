@@ -7,10 +7,12 @@ public class PauseScreen : MonoBehaviour, IPauseScreen
 
     private IPauseScreenView View;
     private ISceneLoader SceneLoader;
+    private ISaveManager SaveManager;
 
     private void Awake()
     {
         SceneLoader = CompositionRoot.GetSceneLoader();
+        SaveManager = CompositionRoot.GetSaveManager();
         var playerInput = CompositionRoot.GetPlayerInput();
         var viewFactory = CompositionRoot.GetViewFactory();
 
@@ -20,6 +22,7 @@ public class PauseScreen : MonoBehaviour, IPauseScreen
 
         View.ResumeClicked += OnResumeClicked;
         View.RestartClicked += OnRestartClicked;
+        View.SaveClicked += OnSaveClicked;
         View.QuitClicked += OnQuitClicked;
     }
 
@@ -35,12 +38,6 @@ public class PauseScreen : MonoBehaviour, IPauseScreen
         }
     }
 
-    private void OnQuitClicked()
-    {
-        ToNormalSpeed();
-        SceneLoader.LoadScene(EScenes.StartScene);
-    }
-
     private void OnResumeClicked()
     {
         Resume();
@@ -50,6 +47,17 @@ public class PauseScreen : MonoBehaviour, IPauseScreen
     {
         ToNormalSpeed();
         SceneLoader.RestartScene();
+    }
+
+    private void OnSaveClicked()
+    {
+        SaveManager.Save();
+    }
+
+    private void OnQuitClicked()
+    {
+        ToNormalSpeed();
+        SceneLoader.LoadScene(EScenes.StartScene);
     }
 
     public void Hide()
