@@ -1,4 +1,6 @@
 ﻿using UnityEngine;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 public class LevelScene : MonoBehaviour
 {
@@ -9,6 +11,8 @@ public class LevelScene : MonoBehaviour
     private IWarrior Warrior;
     private IPlayerInput PlayerInput;
     private ILevelSystem LevelSystem;
+    private IConfiguration Configuration;
+    private ISaveManager SaveManager;
 
     private IGameOverScreen GameOverScreen;
     private IPauseScreen PauseScreen;
@@ -23,7 +27,8 @@ public class LevelScene : MonoBehaviour
         GameCam = CompositionRoot.GetGameCamera();
         Warrior = CompositionRoot.GetWarrior();
         PlayerInput = CompositionRoot.GetPlayerInput();
-        var saveManager = CompositionRoot.GetSaveManager();
+        Configuration = CompositionRoot.GetConfiguration();
+        SaveManager = CompositionRoot.GetSaveManager();
 
         var enemySpawner = CompositionRoot.GetEnemySpawner();
         var environment = CompositionRoot.GetEnvironment();
@@ -49,6 +54,11 @@ public class LevelScene : MonoBehaviour
 
     private void Start()
     {
+        var warriorProperties = JsonConvert.SerializeObject(Configuration.GetWarriorProperties(), Formatting.None);
+        var warriorSaveData = SaveManager.LoadData(Warrior);
+
+        Warrior.Init(warriorProperties);
+
         GameCam.Target = Warrior.Transform;
         levelUpHealthModifier = new CharacterStatModifier(0.1f, StatModType.PercentAdd);
     }

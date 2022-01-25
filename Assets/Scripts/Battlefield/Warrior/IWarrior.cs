@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public interface IWarrior : IAlive, IMovable
+public interface IWarrior : IAlive, IMovable, ISaveable
 {
     CharacterStat HealthStat { get; }
     CharacterStat MoveSpeedStat { get; }
@@ -9,6 +9,7 @@ public interface IWarrior : IAlive, IMovable
 
     event Action StartedDying;
 
+    void Init(string jsonProperties);
     void Rotate(Vector3 rotationPoint);
     void Heal(float healValue);
 }

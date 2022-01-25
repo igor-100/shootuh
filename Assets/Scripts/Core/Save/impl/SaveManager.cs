@@ -21,7 +21,7 @@ public class SaveManager : MonoBehaviour, ISaveManager
         saveRegistry.Add(saveObject);
     }
 
-    public bool TryLoading<T>(T saveObject) where T : ISaveable
+    public string LoadData<T>(T saveObject) where T : ISaveable
     {
         if (IsLoading)
         {
@@ -29,12 +29,11 @@ public class SaveManager : MonoBehaviour, ISaveManager
             {
                 if (item.Name.Equals(saveObject.GetType().ToString()))
                 {
-                    saveObject.LoadData(item.First);
-                    return true;
+                    return item.First.ToString(Formatting.None);
                 }
             }
         }
-        return false;
+        return null;
     }
 
     public void ResetSaveRegistry()

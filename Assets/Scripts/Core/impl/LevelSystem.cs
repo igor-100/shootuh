@@ -20,7 +20,6 @@ public class LevelSystem : MonoBehaviour, ILevelSystem, ISaveable
 
     public event Action<float> ExperiencePercentChanged = percent => { };
     public event Action<int> LevelUp = level => { };
-    public event Action<ISaveable> Initialized;
 
     private void Awake()
     {
@@ -33,13 +32,13 @@ public class LevelSystem : MonoBehaviour, ILevelSystem, ISaveable
 
     private void Start()
     {
-        if (!SaveManager.TryLoading(this))
-        {
+        //if (!SaveManager.TryLoading(this))
+        //{
             level = 1;
             experience = 0;
             experienceToNextLevel = 100;
             ExperiencePercentChanged((float)experience / experienceToNextLevel);
-        }
+        //}
     }
 
     private void OnUnitRemoved(IAlive obj)
@@ -76,11 +75,12 @@ public class LevelSystem : MonoBehaviour, ILevelSystem, ISaveable
 
     public void PrepareSaveData() { }
 
-    public void LoadData(JToken jToken)
+    public void LoadData(string jsonProperties)
     {
-        this.level = jToken.SelectToken("level").ToObject<int>();
-        this.experience = jToken.SelectToken("experience").ToObject<int>();
-        this.experienceToNextLevel = jToken.SelectToken("experienceToNextLevel").ToObject<int>();
+        JObject jObject = JObject.Parse(jsonProperties);
+        this.level = jObject.SelectToken("level").ToObject<int>();
+        this.experience = jObject.SelectToken("experience").ToObject<int>();
+        this.experienceToNextLevel = jObject.SelectToken("experienceToNextLevel").ToObject<int>();
         ExperiencePercentChanged((float)experience / experienceToNextLevel);
     }
 }

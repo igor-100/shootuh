@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 [JsonObject(MemberSerialization.OptIn)]
-public class Warrior : MonoBehaviour, IWarrior, ISaveable
+public class Warrior : MonoBehaviour, IWarrior
 {
     private const string IsRunning = "isRunning";
     private const float GameOverDelay = 2f;
@@ -44,7 +44,6 @@ public class Warrior : MonoBehaviour, IWarrior, ISaveable
     {
         SaveManager = CompositionRoot.GetSaveManager();
         var playerInput = CompositionRoot.GetPlayerInput();
-        warriorProperties = CompositionRoot.GetConfiguration().GetWarriorProperties();
 
         SaveManager.AddToSaveRegistry(this);
 
@@ -54,13 +53,34 @@ public class Warrior : MonoBehaviour, IWarrior, ISaveable
         animator = GetComponent<Animator>();
     }
 
-    private void Start()
+    public void Init(string jsonProperties)
     {
-        if (!SaveManager.TryLoading(this))
+        JObject jObject = JObject.Parse(jsonProperties);
+        this.warriorProperties = jObject.SelectToken("warriorProperties").ToObject<WarriorProperties>();
+
+        var currentHealthToken = jObject.SelectToken("currentHealth");
+        if (currentHealthToken == null)
         {
             currentHealth = warriorProperties.HealthStat.Value;
+        }
+        else
+        {
+            currentHealth = currentHealthToken.ToObject<float>();
+            HealthPercentChanged((float)currentHealth / warriorProperties.HealthStat.Value);
+        }
+
+        var currentMoveSpeedToken = jObject.SelectToken("currentMoveSpeed");
+        if (currentMoveSpeedToken == null)
+        {
             currentMoveSpeed = warriorProperties.MoveSpeedStat.Value;
         }
+        else
+        {
+            currentMoveSpeed = currentMoveSpeedToken.ToObject<float>();
+        }
+
+        var curPos = jObject.SelectToken("currentPositionXZ").ToObject<float[]>();
+        transform.position = new Vector3(curPos[0], 0, curPos[1]);
     }
 
     void Update()
@@ -155,15 +175,6 @@ public class Warrior : MonoBehaviour, IWarrior, ISaveable
             currentHealth += healValue;
         }
         HealthPercentChanged((float)currentHealth / warriorProperties.HealthStat.Value);
-    }
-
-    public void LoadData(JToken jToken)
-    {
-        this.currentHealth = jToken.SelectToken("currentHealth").ToObject<float>();
-        HealthPercentChanged((float)currentHealth / warriorProperties.HealthStat.Value);
-        this.currentMoveSpeed = jToken.SelectToken("currentMoveSpeed").ToObject<float>();
-        var curPos = jToken.SelectToken("currentPositionXZ").ToObject<float[]>();
-        transform.position = new Vector3(curPos[0], 0, curPos[1]);
     }
 
     public void PrepareSaveData()

@@ -32,20 +32,20 @@ public class EnemySpawner : MonoBehaviour, IEnemySpawner, ISaveable
 
     private IEnumerator Start()
     {
-        if (SaveManager.TryLoading(this))
-        {
-            while (spawn)
-            {
-                yield return StartCoroutine(SpawnWavesFrom(EnemySpawnerProperties.Waves, currentWaveId));
-            }
-        }
-        else
-        {
+        //if (SaveManager.TryLoading(this))
+        //{
+        //    while (spawn)
+        //    {
+        //        yield return StartCoroutine(SpawnWavesFrom(EnemySpawnerProperties.Waves, currentWaveId));
+        //    }
+        //}
+        //else
+        //{
             while (spawn)
             {
                 yield return StartCoroutine(SpawnAllWaves(EnemySpawnerProperties.Waves));
             }
-        }
+        //}
     }
 
     private IEnumerator SpawnAllWaves(List<Wave> waves)
@@ -128,8 +128,9 @@ public class EnemySpawner : MonoBehaviour, IEnemySpawner, ISaveable
 
     public void PrepareSaveData() { }
 
-    public void LoadData(JToken jToken)
+    public void LoadData(string jsonProperties)
     {
-        this.currentWaveId = jToken.SelectToken("currentWaveId").ToObject<int>();
+        JObject jObject = JObject.Parse(jsonProperties);
+        this.currentWaveId = jObject.SelectToken("currentWaveId").ToObject<int>();
     }
 }
