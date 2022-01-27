@@ -4,7 +4,7 @@ using System;
 using UnityEngine;
 
 [JsonObject(MemberSerialization.OptIn)]
-public class LevelSystem : MonoBehaviour, ILevelSystem, ISaveable
+public class LevelSystem : MonoBehaviour, ILevelSystem
 {
     private const int experienceForEnemy = 10;
 
@@ -25,20 +25,27 @@ public class LevelSystem : MonoBehaviour, ILevelSystem, ISaveable
     {
         SaveManager = CompositionRoot.GetSaveManager();
         UnitRepository = CompositionRoot.GetUnitRepository();
-        
+
         UnitRepository.UnitRemoved += OnUnitRemoved;
         SaveManager.AddToSaveRegistry(this);
     }
 
-    private void Start()
+    public void Init()
     {
-        //if (!SaveManager.TryLoading(this))
-        //{
-            level = 1;
-            experience = 0;
-            experienceToNextLevel = 100;
-            ExperiencePercentChanged((float)experience / experienceToNextLevel);
-        //}
+        level = 1;
+        experience = 0;
+        experienceToNextLevel = 100;
+        ExperiencePercentChanged((float)experience / experienceToNextLevel);
+    }
+
+    public void Load(string jsonProperties)
+    {
+        Init();
+        JObject jObject = JObject.Parse(jsonProperties);
+        this.level = jObject.SelectToken("level").ToObject<int>();
+        this.experience = jObject.SelectToken("experience").ToObject<int>();
+        this.experienceToNextLevel = jObject.SelectToken("experienceToNextLevel").ToObject<int>();
+        ExperiencePercentChanged((float)experience / experienceToNextLevel);
     }
 
     private void OnUnitRemoved(IAlive obj)
@@ -74,13 +81,4 @@ public class LevelSystem : MonoBehaviour, ILevelSystem, ISaveable
     }
 
     public void PrepareSaveData() { }
-
-    public void LoadData(string jsonProperties)
-    {
-        JObject jObject = JObject.Parse(jsonProperties);
-        this.level = jObject.SelectToken("level").ToObject<int>();
-        this.experience = jObject.SelectToken("experience").ToObject<int>();
-        this.experienceToNextLevel = jObject.SelectToken("experienceToNextLevel").ToObject<int>();
-        ExperiencePercentChanged((float)experience / experienceToNextLevel);
-    }
 }

@@ -46,6 +46,22 @@ public class LevelScene : MonoBehaviour
 
         gameCamComponent = GameCam.CameraComponent;
 
+        if (SaveManager.IsLoading)
+        {
+            var warriorSaveData = SaveManager.LoadData(Warrior);
+            var levelSystemSaveData = SaveManager.LoadData(LevelSystem);
+            var enemySpawnerSaveData = SaveManager.LoadData(enemySpawner);
+            Warrior.Load(warriorSaveData);
+            LevelSystem.Load(levelSystemSaveData);
+            enemySpawner.Load(enemySpawnerSaveData);
+        }
+        else
+        {
+            Warrior.Init(Configuration.GetWarriorProperties());
+            LevelSystem.Init();
+            enemySpawner.Init();
+        }
+
         PlayerInput.MousePositionUpdated += OnMousePositionUpdated;
         Warrior.StartedDying += OnPlayerDying;
         Warrior.Died += OnPlayerDied;
@@ -54,11 +70,6 @@ public class LevelScene : MonoBehaviour
 
     private void Start()
     {
-        var warriorProperties = JsonConvert.SerializeObject(Configuration.GetWarriorProperties(), Formatting.None);
-        var warriorSaveData = SaveManager.LoadData(Warrior);
-
-        Warrior.Init(warriorProperties);
-
         GameCam.Target = Warrior.Transform;
         levelUpHealthModifier = new CharacterStatModifier(0.1f, StatModType.PercentAdd);
     }

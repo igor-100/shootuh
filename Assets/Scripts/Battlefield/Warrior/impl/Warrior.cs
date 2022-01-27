@@ -16,6 +16,7 @@ public class Warrior : MonoBehaviour, IWarrior
     [SerializeField] private WeaponHolder weaponHolder;
 
     private ISaveManager SaveManager;
+    private IPlayerInput PlayerInput;
 
     private Rigidbody rb;
     private Animator animator;
@@ -43,41 +44,34 @@ public class Warrior : MonoBehaviour, IWarrior
     private void Awake()
     {
         SaveManager = CompositionRoot.GetSaveManager();
-        var playerInput = CompositionRoot.GetPlayerInput();
-
-        SaveManager.AddToSaveRegistry(this);
-
-        playerInput.Move += OnMove;
+        PlayerInput = CompositionRoot.GetPlayerInput();
 
         rb = GetComponent<Rigidbody>();
         animator = GetComponent<Animator>();
     }
 
-    public void Init(string jsonProperties)
+    public void Init(WarriorProperties warriorProperties)
+    {
+        this.warriorProperties = warriorProperties;
+
+        SaveManager.AddToSaveRegistry(this);
+        PlayerInput.Move += OnMove;
+
+        currentHealth = warriorProperties.HealthStat.BaseValue;
+        currentMoveSpeed = warriorProperties.MoveSpeedStat.BaseValue;
+    }
+
+    public void Load(string jsonProperties)
     {
         JObject jObject = JObject.Parse(jsonProperties);
-        this.warriorProperties = jObject.SelectToken("warriorProperties").ToObject<WarriorProperties>();
 
-        var currentHealthToken = jObject.SelectToken("currentHealth");
-        if (currentHealthToken == null)
-        {
-            currentHealth = warriorProperties.HealthStat.Value;
-        }
-        else
-        {
-            currentHealth = currentHealthToken.ToObject<float>();
-            HealthPercentChanged((float)currentHealth / warriorProperties.HealthStat.Value);
-        }
+        var warriorProperties = jObject.SelectToken("warriorProperties").ToObject<WarriorProperties>();
+        Init(warriorProperties);
 
-        var currentMoveSpeedToken = jObject.SelectToken("currentMoveSpeed");
-        if (currentMoveSpeedToken == null)
-        {
-            currentMoveSpeed = warriorProperties.MoveSpeedStat.Value;
-        }
-        else
-        {
-            currentMoveSpeed = currentMoveSpeedToken.ToObject<float>();
-        }
+        currentHealth = jObject.SelectToken("currentHealth").ToObject<float>();
+        HealthPercentChanged((float)currentHealth / warriorProperties.HealthStat.Value);
+
+        currentMoveSpeed = jObject.SelectToken("currentMoveSpeed").ToObject<float>();
 
         var curPos = jObject.SelectToken("currentPositionXZ").ToObject<float[]>();
         transform.position = new Vector3(curPos[0], 0, curPos[1]);
@@ -147,7 +141,7 @@ public class Warrior : MonoBehaviour, IWarrior
         Debug.Log("Hit. Current health: " + currentHealth + ", healthstat value: " + warriorProperties.HealthStat.Value);
         if (currentHealth <= 0)
         {
-            StartDying();    
+            StartDying();
         }
     }
 

@@ -9,7 +9,7 @@ public interface IWarrior : IAlive, IMovable, ISaveable
 
     event Action StartedDying;
 
-    void Init(string jsonProperties);
+    void Init(WarriorProperties warriorProperties);
     void Rotate(Vector3 rotationPoint);
     void Heal(float healValue);
 }

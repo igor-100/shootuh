@@ -5,9 +5,9 @@ using UnityEngine;
 
 public class SaveManager : MonoBehaviour, ISaveManager
 {
-    private List<ISaveable> saveRegistry = new List<ISaveable>();
+    public bool IsLoading { get; private set; }
 
-    private bool IsLoading;
+    private List<ISaveable> saveRegistry = new List<ISaveable>();
     private JObject currentLoadingData;
 
     private void Awake()

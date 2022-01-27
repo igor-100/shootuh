@@ -80,6 +80,17 @@ public class CompositionRoot : MonoBehaviour
         return Warrior;
     }
 
+    public static IWarrior GetWarrior(string data)
+    {
+        if (Warrior == null)
+        {
+            var resourceManager = GetResourceManager();
+            Warrior = resourceManager.CreatePrefabInstance<IWarrior, EComponents>(EComponents.Warrior);
+        }
+
+        return Warrior;
+    }
+
     public static IEnemySpawner GetEnemySpawner()
     {
         if (EnemySpawner == null)

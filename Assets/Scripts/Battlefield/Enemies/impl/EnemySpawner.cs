@@ -6,7 +6,7 @@ using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
 
 [JsonObject(MemberSerialization.OptIn)]
-public class EnemySpawner : MonoBehaviour, IEnemySpawner, ISaveable
+public class EnemySpawner : MonoBehaviour, IEnemySpawner
 {
     private IResourceManager ResourceManager;
     private IUnitRepository UnitRepository;
@@ -15,9 +15,9 @@ public class EnemySpawner : MonoBehaviour, IEnemySpawner, ISaveable
     private ISaveManager SaveManager;
 
     [JsonProperty]
-    private int currentWaveId = 0;
+    private int currentWaveId = 1;
 
-    private bool spawn = true;
+    private bool isTriggeredToSpawn = false;
 
     private void Awake()
     {
@@ -30,35 +30,31 @@ public class EnemySpawner : MonoBehaviour, IEnemySpawner, ISaveable
         SaveManager.AddToSaveRegistry(this);
     }
 
-    private IEnumerator Start()
+    public void Init()
     {
-        //if (SaveManager.TryLoading(this))
-        //{
-        //    while (spawn)
-        //    {
-        //        yield return StartCoroutine(SpawnWavesFrom(EnemySpawnerProperties.Waves, currentWaveId));
-        //    }
-        //}
-        //else
-        //{
-            while (spawn)
-            {
-                yield return StartCoroutine(SpawnAllWaves(EnemySpawnerProperties.Waves));
-            }
-        //}
+        isTriggeredToSpawn = true;
     }
 
-    private IEnumerator SpawnAllWaves(List<Wave> waves)
+    private void Update()
     {
-        foreach (var wave in waves)
+        if (isTriggeredToSpawn)
         {
-            yield return StartCoroutine(SpawnWave(wave));
+            isTriggeredToSpawn = false;
+            StartCoroutine(SpawnWavesFrom(EnemySpawnerProperties.Waves, currentWaveId));
         }
+    }
+
+    public void Load(string jsonProperties)
+    {
+        JObject jObject = JObject.Parse(jsonProperties);
+
+        this.currentWaveId = jObject.SelectToken("currentWaveId").ToObject<int>();
+        Init();
     }
 
     private IEnumerator SpawnWavesFrom(List<Wave> waves, int startingWaveId)
     {
-        for (int i = startingWaveId; i < waves.Count; i++)
+        for (int i = startingWaveId - 1; i < waves.Count; i++)
         {
             var wave = waves[i];
             yield return StartCoroutine(SpawnWave(wave));
