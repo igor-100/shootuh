@@ -17,8 +17,6 @@ public class EnemySpawner : MonoBehaviour, IEnemySpawner
     [JsonProperty]
     private int currentWaveId = 1;
 
-    private bool isTriggeredToSpawn = false;
-
     private void Awake()
     {
         SaveManager = CompositionRoot.GetSaveManager();
@@ -32,16 +30,7 @@ public class EnemySpawner : MonoBehaviour, IEnemySpawner
 
     public void Init()
     {
-        isTriggeredToSpawn = true;
-    }
-
-    private void Update()
-    {
-        if (isTriggeredToSpawn)
-        {
-            isTriggeredToSpawn = false;
-            StartCoroutine(SpawnWavesFrom(EnemySpawnerProperties.Waves, currentWaveId));
-        }
+        StartCoroutine(SpawnWavesFrom(EnemySpawnerProperties.Waves, currentWaveId));
     }
 
     public void Load(string jsonProperties)

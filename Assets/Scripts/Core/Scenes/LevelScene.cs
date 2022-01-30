@@ -13,6 +13,7 @@ public class LevelScene : MonoBehaviour
     private ILevelSystem LevelSystem;
     private IConfiguration Configuration;
     private ISaveManager SaveManager;
+    private IEnemySpawner EnemySpawner;
 
     private IGameOverScreen GameOverScreen;
     private IPauseScreen PauseScreen;
@@ -30,7 +31,7 @@ public class LevelScene : MonoBehaviour
         Configuration = CompositionRoot.GetConfiguration();
         SaveManager = CompositionRoot.GetSaveManager();
 
-        var enemySpawner = CompositionRoot.GetEnemySpawner();
+        EnemySpawner = CompositionRoot.GetEnemySpawner();
         var environment = CompositionRoot.GetEnvironment();
         LevelSystem = CompositionRoot.GetLevelSystem();
 
@@ -46,26 +47,31 @@ public class LevelScene : MonoBehaviour
 
         gameCamComponent = GameCam.CameraComponent;
 
-        if (SaveManager.IsLoading)
-        {
-            var warriorSaveData = SaveManager.LoadData(Warrior);
-            var levelSystemSaveData = SaveManager.LoadData(LevelSystem);
-            var enemySpawnerSaveData = SaveManager.LoadData(enemySpawner);
-            Warrior.Load(warriorSaveData);
-            LevelSystem.Load(levelSystemSaveData);
-            enemySpawner.Load(enemySpawnerSaveData);
-        }
-        else
-        {
-            Warrior.Init(Configuration.GetWarriorProperties());
-            LevelSystem.Init();
-            enemySpawner.Init();
-        }
+        InitObjects();
 
         PlayerInput.MousePositionUpdated += OnMousePositionUpdated;
         Warrior.StartedDying += OnPlayerDying;
         Warrior.Died += OnPlayerDied;
         LevelSystem.LevelUp += OnLevelUp;
+    }
+
+    private void InitObjects()
+    {
+        if (SaveManager.IsLoading)
+        {
+            var warriorSaveData = SaveManager.LoadData(Warrior);
+            var levelSystemSaveData = SaveManager.LoadData(LevelSystem);
+            var enemySpawnerSaveData = SaveManager.LoadData(EnemySpawner);
+            Warrior.Load(warriorSaveData);
+            LevelSystem.Load(levelSystemSaveData);
+            EnemySpawner.Load(enemySpawnerSaveData);
+        }
+        else
+        {
+            Warrior.Init(Configuration.GetWarriorProperties());
+            LevelSystem.Init();
+            EnemySpawner.Init();
+        }
     }
 
     private void Start()

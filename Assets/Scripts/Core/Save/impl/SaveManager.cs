@@ -23,14 +23,11 @@ public class SaveManager : MonoBehaviour, ISaveManager
 
     public string LoadData<T>(T saveObject) where T : ISaveable
     {
-        if (IsLoading)
+        foreach (var item in currentLoadingData.Children<JProperty>())
         {
-            foreach (var item in currentLoadingData.Children<JProperty>())
+            if (item.Name.Equals(saveObject.GetType().ToString()))
             {
-                if (item.Name.Equals(saveObject.GetType().ToString()))
-                {
-                    return item.First.ToString(Formatting.None);
-                }
+                return item.First.ToString(Formatting.None);
             }
         }
         return null;
