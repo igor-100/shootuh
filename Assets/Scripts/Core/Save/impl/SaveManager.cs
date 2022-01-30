@@ -64,6 +64,16 @@ public class SaveManager : MonoBehaviour, ISaveManager
         currentLoadingData = JObject.Parse(json);
     }
 
+    public void Load(string fileName)
+    {
+        ResetSaveRegistry();
+
+        IsLoading = true;
+
+        var json = SaveSystem.Load(fileName);
+        currentLoadingData = JObject.Parse(json);
+    }
+
     public void New()
     {
         ResetSaveRegistry();

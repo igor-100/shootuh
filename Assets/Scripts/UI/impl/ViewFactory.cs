@@ -33,6 +33,14 @@
         return view;
     }
 
+    public ILoadScreenView CreateLoadScreen()
+    {
+        var view = ResourceManager.CreatePrefabInstance<ILoadScreenView, EViews>(EViews.Load_Screen);
+        view.SetParent(UIRoot.MainCanvas);
+
+        return view;
+    }
+
     public IHUDWeaponView CreateHUDWeapon()
     {
         var view = ResourceManager.CreatePrefabInstance<IHUDWeaponView, EViews>(EViews.HUDWeapon);

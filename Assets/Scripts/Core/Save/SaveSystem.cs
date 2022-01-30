@@ -1,7 +1,10 @@
 ﻿using System.IO;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using UnityEngine;
+using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
 
 public static class SaveSystem
 {
@@ -17,14 +20,10 @@ public static class SaveSystem
 
     public static void Save(string saveString)
     {
-        var directoryInfo = new DirectoryInfo(saveFolder);
-        Regex reg = new Regex(@"save_[0-9]+.json$");
 
-        var saveFiles = directoryInfo.GetFiles()
-            .Where(fileInfo => reg.IsMatch(fileInfo.Name))
-            .ToArray();
+        var saveFiles = GetAllSaveFilesInfo();
 
-        FileInfo oldestFile = GetOldestFileInfo(saveFiles);
+        var oldestFile = GetOldestFileInfo(saveFiles);
 
         if (saveFiles.Length > 4)
         {
@@ -42,24 +41,40 @@ public static class SaveSystem
 
     public static string Load()
     {
-        var directoryInfo = new DirectoryInfo(saveFolder);
-        Regex reg = new Regex(@"save_[0-9]+.json$");
+        var saveFiles = GetAllSaveFilesInfo();
 
-        var saveFiles = directoryInfo.GetFiles()
-            .Where(fileInfo => reg.IsMatch(fileInfo.Name))
-            .ToArray();
-
-        FileInfo mostRecentFile = GetMostRecentFileInfo(saveFiles);
+        var mostRecentFile = GetMostRecentFileInfo(saveFiles);
 
         if (mostRecentFile != null)
         {
-            string saveString = File.ReadAllText(mostRecentFile.FullName);
+            var saveString = File.ReadAllText(mostRecentFile.FullName);
             return saveString;
         }
         else
         {
             return null;
         }
+    }
+
+    public static string Load(string fileName)
+    {
+        var saveFiles = GetAllSaveFilesInfo();
+
+        var fileInfo = saveFiles.ToList().Find(file => fileName.Equals(file.Name));
+        var saveString = File.ReadAllText(fileInfo.FullName);
+
+        return saveString;
+    }
+
+    private static FileInfo[] GetAllSaveFilesInfo()
+    {
+        var directoryInfo = new DirectoryInfo(saveFolder);
+        Regex reg = new Regex(@"save_[0-9]+.json$");
+
+        var saveFiles = directoryInfo.GetFiles()
+            .Where(fileInfo => reg.IsMatch(fileInfo.Name))
+            .ToArray();
+        return saveFiles;
     }
 
     private static FileInfo GetOldestFileInfo(FileInfo[] saveFiles)
@@ -102,5 +117,21 @@ public static class SaveSystem
         }
 
         return mostRecentFile;
+    }
+
+    public static List<SaveFile> GetAllSaveFiles()
+    {
+        List<SaveFile> saveFiles = new List<SaveFile>();
+
+        foreach (var saveFileInfo in GetAllSaveFilesInfo())
+        {
+            saveFiles.Add(new SaveFile()
+            {
+                Name = saveFileInfo.Name,
+                DateTime = saveFileInfo.LastWriteTime
+            });
+        } 
+
+        return saveFiles;
     }
 }

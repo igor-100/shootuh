@@ -32,8 +32,9 @@ public class MainMenuScreen : MonoBehaviour, IMainMenuScreen
 
     private void OnLoadClicked()
     {
-        SaveManager.Load();
-        SceneLoader.LoadScene(EScenes.GameScene);
+        View.Hide();
+        var loadScreen = CompositionRoot.GetLoadScreen();
+        loadScreen.Show();
     }
 
     public void Hide()

@@ -22,6 +22,7 @@ public class CompositionRoot : MonoBehaviour
     private static IHUDLevel HUDLevel;
     private static IGameOverScreen GameOverScreen;
     private static IMainMenuScreen MainMenuScreen;
+    private static ILoadScreen LoadScreen;
     private static IPauseScreen PauseScreen;
 
     private void OnDestroy()
@@ -43,6 +44,7 @@ public class CompositionRoot : MonoBehaviour
         GameOverScreen = null;
         MainMenuScreen = null;
         PauseScreen = null;
+        LoadScreen = null;
 
         var resourceManager = GetResourceManager();
         resourceManager.ResetPools();
@@ -221,6 +223,17 @@ public class CompositionRoot : MonoBehaviour
         }
 
         return MainMenuScreen;
+    }
+
+    public static ILoadScreen GetLoadScreen()
+    {
+        if (LoadScreen == null)
+        {
+            var gameObject = new GameObject("LoadScreen");
+            LoadScreen = gameObject.AddComponent<LoadScreen>();
+        }
+
+        return LoadScreen;
     }
 
     public static IHUDWeapon GetHUDWeapon()
