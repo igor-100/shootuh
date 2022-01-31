@@ -16,7 +16,7 @@ public class Projectile : MonoBehaviour, IProjectile
 
     private IEnumerator WaitingForTrailToEnable()
     {
-        yield return new WaitForEndOfFrame();
+        yield return new WaitForSeconds(0.01f);
         trail.SetActive(true);
     }
 
