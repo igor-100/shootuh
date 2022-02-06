@@ -79,6 +79,7 @@ public class LevelScene : MonoBehaviour
 
     private void Start()
     {
+        AudioManager.PlayMusic(EAudio.Main_Music);
         GameCam.Target = Warrior.Transform;
         levelUpHealthModifier = new CharacterStatModifier(0.1f, StatModType.PercentAdd);
     }
