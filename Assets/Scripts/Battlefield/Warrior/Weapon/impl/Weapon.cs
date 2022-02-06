@@ -1,3 +1,4 @@
+using Assets.Scripts.Core.Audio;
 using System;
 using System.Collections;
 using UnityEngine;
@@ -8,6 +9,7 @@ public abstract class Weapon : MonoBehaviour, IWeapon
 
     private IPlayerInput PlayerInput;
     private IResourceManager ResourceManager;
+    private IAudioManager AudioManager;
 
     private WeaponProperties weaponProperties;
 
@@ -25,6 +27,7 @@ public abstract class Weapon : MonoBehaviour, IWeapon
     {
         ResourceManager = CompositionRoot.GetResourceManager();
         PlayerInput = CompositionRoot.GetPlayerInput();
+        AudioManager = CompositionRoot.GetAudioManager();
 
         weaponProperties = InitProperties();
 
@@ -55,6 +58,7 @@ public abstract class Weapon : MonoBehaviour, IWeapon
 
     private void ShootProjectile()
     {
+        AudioManager.PlayEffect(EAudio.Laser_Shot);
         InstantiateProjectile();
     }
 
@@ -73,6 +77,7 @@ public abstract class Weapon : MonoBehaviour, IWeapon
     private IEnumerator WaitForReloading()
     {
         isReloading = true;
+        AudioManager.PlayEffect(EAudio.Laser_Reload);
         yield return new WaitForSeconds(weaponProperties.ReloadTime);
         CurrentAmmoChanged(currentAmmo = weaponProperties.MaxAmmo);
         isReloading = false;

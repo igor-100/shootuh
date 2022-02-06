@@ -1,3 +1,4 @@
+using Assets.Scripts.Core.Audio;
 using System;
 using System.Collections;
 using UnityEngine;
@@ -16,6 +17,8 @@ public abstract class Enemy : MonoBehaviour, IEnemy
     protected float currentMoveSpeed;
 
     protected IResourceManager ResourceManager;
+    protected IAudioManager AudioManager;
+
     protected Animator animator;
     protected Rigidbody rb;
     protected BoxCollider boxCollider;
@@ -40,6 +43,7 @@ public abstract class Enemy : MonoBehaviour, IEnemy
     void Awake()
     {
         ResourceManager = CompositionRoot.GetResourceManager();
+        AudioManager = CompositionRoot.GetAudioManager();
 
         enemyProperties = InitProperties();
 

@@ -2,6 +2,7 @@ using System;
 using UnityEngine;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Assets.Scripts.Core.Audio;
 
 [JsonObject(MemberSerialization.OptIn)]
 public class Warrior : MonoBehaviour, IWarrior
@@ -17,12 +18,14 @@ public class Warrior : MonoBehaviour, IWarrior
 
     private ISaveManager SaveManager;
     private IPlayerInput PlayerInput;
+    private IAudioManager AudioManager;
 
     private Rigidbody rb;
     private Animator animator;
 
     private Vector3 movement;
     private bool isMoving;
+    private float nextTimeToStep = 0f;
 
     [JsonProperty]
     private WarriorProperties warriorProperties;
@@ -45,6 +48,7 @@ public class Warrior : MonoBehaviour, IWarrior
     {
         SaveManager = CompositionRoot.GetSaveManager();
         PlayerInput = CompositionRoot.GetPlayerInput();
+        AudioManager = CompositionRoot.GetAudioManager();
 
         rb = GetComponent<Rigidbody>();
         animator = GetComponent<Animator>();
@@ -80,7 +84,7 @@ public class Warrior : MonoBehaviour, IWarrior
     void Update()
     {
         UpdateIsMoving();
-        AnimationMove();
+        OnIsMoving();
     }
 
     private void FixedUpdate()
@@ -105,15 +109,25 @@ public class Warrior : MonoBehaviour, IWarrior
         isMoving = movement.x != 0 || movement.z != 0;
     }
 
-    private void AnimationMove()
+    private void OnIsMoving()
     {
         if (isMoving)
         {
+            PlayStep();
             animator.SetBool(IsRunning, true);
         }
         else
         {
             animator.SetBool(IsRunning, false);
+        }
+    }
+
+    private void PlayStep()
+    {
+        if (Time.time >= nextTimeToStep)
+        {
+            nextTimeToStep = Time.time + 0.29f;
+            AudioManager.PlayEffect(EAudio.Run);
         }
     }
 
@@ -148,6 +162,7 @@ public class Warrior : MonoBehaviour, IWarrior
     private void StartDying()
     {
         StartedDying();
+        AudioManager.PlayEffect(EAudio.Death);
         currentHealth = 0;
         gameObject.SetActive(false);
         Invoke("FinallyDie", GameOverDelay);

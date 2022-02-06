@@ -10,6 +10,7 @@ public class EnemyHM : Enemy
     // called in Animator
     public void Attack()
     {
+        AudioManager.PlayEffect(EAudio.Enemy_Melee);
         RaycastHit objectHit;
         if (Physics.Raycast(new Vector3(transform.position.x, transform.position.y + enemyProperties.HitHeight, transform.position.z),
             transform.forward, out objectHit, enemyProperties.AttackRange, LayerMask.GetMask(PlayerMaskName)))

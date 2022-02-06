@@ -14,6 +14,7 @@ public class EnemyCM : Enemy
     // called in Animator
     public void Attack()
     {
+        AudioManager.PlayEffect(EAudio.Enemy_Laser_Shot);
         var projectileObj = ResourceManager.GetPooledObject<IProjectile, EComponents>(EComponents.Projectile_Red);
         projectileObj.transform.position = gunTransform.position;
         projectileObj.GetComponent<Rigidbody>().velocity = gunTransform.forward * projectileSpeed;

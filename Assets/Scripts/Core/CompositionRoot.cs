@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Assets.Scripts.Core.Audio;
+using UnityEngine;
 using UnityEngine.EventSystems;
 
 public class CompositionRoot : MonoBehaviour
@@ -16,6 +17,7 @@ public class CompositionRoot : MonoBehaviour
     private static IUnitRepository UnitRepository;
     private static IResourceManager ResourceManager;
     private static ISaveManager SaveManager;
+    private static IAudioManager AudioManager;
     private static IConfiguration Configuration;
 
     private static IHUDWeapon HUDWeapon;
@@ -37,6 +39,7 @@ public class CompositionRoot : MonoBehaviour
         Configuration = null;
         UnitRepository = null;
         LevelSystem = null;
+        AudioManager = null;
         //EventSystem = null;
 
         HUDWeapon = null;
@@ -156,6 +159,17 @@ public class CompositionRoot : MonoBehaviour
         }
 
         return SaveManager;
+    }
+
+    public static IAudioManager GetAudioManager()
+    {
+        if (AudioManager == null)
+        {
+            var gameObject = new GameObject("AudioManager");
+            AudioManager = gameObject.AddComponent<AudioManager>();
+        }
+
+        return AudioManager;
     }
 
     public static IUnitRepository GetUnitRepository()

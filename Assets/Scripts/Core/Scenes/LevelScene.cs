@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Assets.Scripts.Core.Audio;
 
 public class LevelScene : MonoBehaviour
 {
@@ -14,6 +15,7 @@ public class LevelScene : MonoBehaviour
     private IConfiguration Configuration;
     private ISaveManager SaveManager;
     private IEnemySpawner EnemySpawner;
+    private IAudioManager AudioManager;
 
     private IGameOverScreen GameOverScreen;
     private IPauseScreen PauseScreen;
@@ -30,6 +32,7 @@ public class LevelScene : MonoBehaviour
         PlayerInput = CompositionRoot.GetPlayerInput();
         Configuration = CompositionRoot.GetConfiguration();
         SaveManager = CompositionRoot.GetSaveManager();
+        AudioManager = CompositionRoot.GetAudioManager();
 
         EnemySpawner = CompositionRoot.GetEnemySpawner();
         var environment = CompositionRoot.GetEnvironment();
@@ -82,6 +85,7 @@ public class LevelScene : MonoBehaviour
 
     private void OnLevelUp(int level)
     {
+        AudioManager.PlayEffect(EAudio.Level_Up);
         Warrior.HealthStat.AddModifier(levelUpHealthModifier);
         Warrior.Heal(level * levelUpHealMultiplier);
         Debug.Log("Level up. Max health is updated: " + Warrior.HealthStat.Value);
