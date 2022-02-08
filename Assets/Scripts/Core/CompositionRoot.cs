@@ -39,7 +39,6 @@ public class CompositionRoot : MonoBehaviour
         Configuration = null;
         UnitRepository = null;
         LevelSystem = null;
-        AudioManager = null;
         //EventSystem = null;
 
         HUDWeapon = null;

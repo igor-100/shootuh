@@ -11,5 +11,7 @@ namespace Assets.Scripts.Core.Audio
 
         void SetMusicActive(bool isActive);
         void SetEffectsActive(bool isActive);
+
+        bool IsMusicAlreadyPlaying(EAudio audio);
     }
 }

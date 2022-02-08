@@ -14,5 +14,6 @@ public enum EComponents
     Projectile_Green,
     Projectile_Purple,
     MusicAudioMixer,
-    EffectsAudioMixer
+    EffectsAudioMixer,
+    AudioListener
 }

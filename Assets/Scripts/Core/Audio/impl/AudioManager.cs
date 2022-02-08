@@ -20,6 +20,8 @@ namespace Assets.Scripts.Core.Audio
 
             MusicAudioMixer = ResourceManager.GetAsset<AudioMixer, EComponents>(EComponents.MusicAudioMixer);
             EffectsAudioMixer = ResourceManager.GetAsset<AudioMixer, EComponents>(EComponents.EffectsAudioMixer);
+
+            DontDestroyOnLoad(gameObject);
         }
 
         public void PlayEffect(EAudio audio)
@@ -29,13 +31,13 @@ namespace Assets.Scripts.Core.Audio
             EffectList.Add(effect);
 
             StartCoroutine(PlayAndDestroy(effect));
+
+            DontDestroyOnLoad(effect);
         }
 
         public void PlayMusic(EAudio audio, bool isLoop = true)
         {
-            var alreadyPlaying = MusicDict.ContainsKey(audio);
-
-            if (alreadyPlaying)
+            if (IsMusicAlreadyPlaying(audio))
             {
                 MusicDict[audio].time = 0f;
                 return;
@@ -46,6 +48,8 @@ namespace Assets.Scripts.Core.Audio
             music.Play();
 
             MusicDict.Add(audio, music);
+
+            DontDestroyOnLoad(music);
         }
 
         public void SetEffectsActive(bool isActive)
@@ -68,6 +72,11 @@ namespace Assets.Scripts.Core.Audio
             music.Stop();
 
             MusicDict.Remove(audio);
+        }
+
+        public bool IsMusicAlreadyPlaying(EAudio audio)
+        {
+            return MusicDict.ContainsKey(audio);
         }
 
         private IEnumerator PlayAndDestroy(AudioSource source)
